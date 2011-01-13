@@ -1,23 +1,24 @@
 # -*- coding: utf-8 -*-
 import os
+from UserDict import IterableUserDict
 from distutils2.metadata import DistributionMetadata
 
 __all__ = ('MetadataRepository',)
 
 
-class MetadataRepository(object):
+class MetadataRepository(IterableUserDict):
     """A repository of Python distribution metadata stored in a directory
     structure on the file system. The structure would organized by
     distribution name then by release (or version)."""
 
     def __init__(self, location):
+        IterableUserDict.__init__(self)
         self.location = location
         if not os.path.exists(self.location):
             raise Exception("Can't find the repository location at %s"
                             % location)
         #: Intialize the data in a dictionary of distribution names
         #  (keys) with a list of versions (values).
-        self._repo = {}
         self._init_repo()
 
     def _init_repo(self):
@@ -33,11 +34,11 @@ class MetadataRepository(object):
                 #: Nevermind, it's not a distribution...
                 continue
             for version in os.listdir(dist_path):
-                if dist not in self._repo:
-                    self._repo[dist] = []
+                if dist not in self.data:
+                    self.data[dist] = []
                 metadata_file = os.path.join(dist_path, version, 'METADATA')
                 if os.path.exists(metadata_file):
-                    self._repo[dist].append(version)
+                    self.data[dist].append(version)
                 else:
                     # XXX Need to warn the user that the metadata is missing!
                     pass
@@ -46,4 +47,3 @@ class MetadataRepository(object):
         class_name = self.__class__.__name__ 
         abs_location = os.path.abspath(self.location)
         return '%s("%s")' % (class_name, abs_location)
-
