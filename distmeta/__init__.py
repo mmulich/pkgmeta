@@ -6,6 +6,16 @@ from distutils2.metadata import DistributionMetadata
 __all__ = ('MetadataRepository',)
 
 
+class ReleaseSet(list):
+    """A set of releases for a distribution.
+
+    Initialized by an optional list of dist-info directories.
+    """
+
+    def __init__(self, iterable=[]):
+        super(ReleaseSet, self).__init__(iterable)
+
+
 class MetadataRepository(IterableUserDict):
     """A repository of Python distribution metadata stored in a directory
     structure on the file system. The structure would organized by
