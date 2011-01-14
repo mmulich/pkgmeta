@@ -24,11 +24,22 @@ class TestDistributionMetadataComparisons(unittest.TestCase):
 
     def test_less_or_lessequal(self):
         #: Set up the metadata objects.
-        meta_one = self.makeOne(mapping={'name': 'meta_one',
+        meta_one = self.makeOne(mapping={'name': 'common',
                                          'version': '1.0'})
-        meta_two = self.makeOne(mapping={'name': 'meta_two',
+        meta_two = self.makeOne(mapping={'name': 'common',
                                          'version': '2.0'})
         self.assertLess(meta_one, meta_two)
         #: Change the name to ensure that differnt dist
         #  with the same version aren't equal.
         self.assertLessEqual(meta_one, meta_two)
+
+    def test_greater_or_greaterequal(self):
+        #: Set up the metadata objects.
+        meta_one = self.makeOne(mapping={'name': 'common',
+                                         'version': '1.0.1'})
+        meta_two = self.makeOne(mapping={'name': 'common',
+                                         'version': '1.0a1'})
+        self.assertGreater(meta_one, meta_two)
+        #: Change the name to ensure that differnt dist
+        #  with the same version aren't equal.
+        self.assertGreaterEqual(meta_one, meta_two)

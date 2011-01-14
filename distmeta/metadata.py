@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from distutils2.errors import IrrationalVersionError
 from distutils2.metadata import DistributionMetadata as DM
-from distutils2.version import suggest_normalized_version
+from distutils2.version import suggest_normalized_version, NormalizedVersion
 
 __all__ = ('DistributionMetadata',)
 
@@ -14,17 +14,22 @@ class DistributionMetadata(DM):
     """Subclass of distutils2.metadata.DistributionMetadata to add comparison
     operators."""
 
+    def __repr__(self):
+        name = self.get('Name')
+        version = self.get('Version')
+        return "<DistributionMetadata \"%s (%s)\">" % (name, version)
+
     @property
     def normalized_version(self):
-        version = suggest_normalized_version(self.version)
+        version = suggest_normalized_version(self['Version'])
         if version is None:
             raise InvalidVersion("cannot determine the normalized version "
                                  "for:  %s" % self.version)
-        return version
+        return NormalizedVersion(version)
 
     @property
     def _comparison_parts(self):
-        return (self['Name'], self.normalized_version,)
+        return (self.normalized_version, self['Name'],)
 
     def _cannot_compare(self, other):
         raise TypeError("cannot compare %s and %s"
