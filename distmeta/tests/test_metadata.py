@@ -12,3 +12,6 @@ class TestDistributionMetadataComparisons(unittest.TestCase):
         meta_one = DistributionMetadata(mapping=mapping)
         meta_two = DistributionMetadata(mapping=mapping)
         self.assertEqual(meta_one, meta_two)
+        mapping['name'] = 'notcommon'
+        meta_two = DistributionMetadata(mapping=mapping)
+        self.assertNotEqual(meta_one, meta_two)

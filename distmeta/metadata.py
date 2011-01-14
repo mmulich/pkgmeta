@@ -15,6 +15,10 @@ class DistributionMetadata(DM):
     def normalized_version(self):
         return self.version
 
+    @property
+    def _comparison_parts(self):
+        return (self['Name'], self.normalized_version,)
+
     def _cannot_compare(self, other):
         raise TypeError("cannot compare %s and %s"
                 % (type(self).__name__, type(other).__name__))
@@ -22,7 +26,7 @@ class DistributionMetadata(DM):
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             self._cannot_compare(other)
-        return self.normalized_version == other.normalized_version
+        return self._comparison_parts == other._comparison_parts
 
     def __lt__(self, other):
         return False
