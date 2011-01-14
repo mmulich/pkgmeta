@@ -1,24 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-import tempfile
-import shutil
 from distmeta.tests import unittest
+from distmeta.tests.base import BaseTestCase
 from distmeta.tests.utils import populate_repo, ALL_DISTS
-
-
-class BaseTestCase(unittest.TestCase):
-    """Base test case to set up the repository examples."""
-
-    def setUp(self):
-        self.repo_location = tempfile.mkdtemp('-repo', 'dist-metadata-')
-
-    def tearDown(self):
-        shutil.rmtree(self.repo_location)
-
-
-class TestReleaseSet(BaseTestCase):
-    """ """
-    
 
 
 class TestMetadataRepository(BaseTestCase):
@@ -51,3 +35,4 @@ class TestMetadataRepository(BaseTestCase):
         releases = self.repo.get('solarcal', None)
         from distmeta import ReleaseSet
         self.assertIsInstance(releases, ReleaseSet)
+        
