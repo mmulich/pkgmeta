@@ -35,3 +35,6 @@ class TestMetadataRepository(BaseTestCase):
         releases = self.repo.get('solarcal', None)
         from distmeta.releases import ReleaseSet
         self.assertIsInstance(releases, ReleaseSet)
+        #: It'd be easier to do this with the with statement, but it's not
+        #  Python <2.6 compatible.
+        self.assertRaises(KeyError, lambda a: self.repo[a], ('bogus')) 

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
 from UserDict import DictMixin
+from distmeta.metadata import DistributionMetadata
 from distmeta.releases import ReleaseSet
 
 __all__ = ('MetadataRepository',)
 
 
-class MetadataRepository(DictMixin):
+class MetadataRepository(object, DictMixin):
     """A repository of Python distribution metadata stored in a directory
     structure on the file system. The structure would organized by
     distribution name then by release (or version)."""
@@ -40,6 +41,16 @@ class MetadataRepository(DictMixin):
             return '%s.from_path("%s")' % (cls_name, abs_location)
         releases_repr = ', '.join([repr(x) for x in self._data])
         return '<%s of %s>' % (cls_name, releases_repr)
+
+    def __setitem__(self, key, value):
+        if key in self:
+            raise NotImplementedError("Not sure what to do yet.")
+        if isinstance(value, ReleaseSet):
+            raise NotImplementedError("todo...")
+        elif isinstance(value, DistributionMetadata):
+            raise NotImplementedError("todo...")
+        else:
+            raise TypeError("Unknown value type: %s" % type(value))
 
     def __getitem__(self, key):
         release_set = None
