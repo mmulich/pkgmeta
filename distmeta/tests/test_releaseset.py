@@ -6,7 +6,6 @@ from distmeta.tests.utils import populate_repo, SOAPBAR
 
 
 class TestReleaseSet(BaseTestCase):
-    """ """
 
     def setUp(self):
         super(TestReleaseSet, self).setUp()
@@ -24,8 +23,27 @@ class TestReleaseSet(BaseTestCase):
         return ReleaseSet.from_path(release_path)
 
     def test_from_path(self):
-        self.fail()
-
+        release_count = len(SOAPBAR[1])
+        self.assertEqual(len(self.release_set), release_count)
 
     def test_order(self):
-        self.fail()
+        #: Ensure they are out of order first by shifting them.
+        def shift(l, n):
+            if len(l):
+                n = n % len(l)
+            else:
+                n = 0
+            return l[n:] + l[:n]
+        from distmeta import ReleaseSet
+        release_set = ReleaseSet(shift(self.release_set, 7))
+        #: Reset the order via the private method called at __init__ time.
+        release_set._reorder()
+        #: Check to see if the order is correct by rolling through the
+        #  versions list.
+        str_ify = lambda l: '|'.join(l)
+        versions = SOAPBAR[1]
+        self.assertEqual(str_ify(versions),
+                         str_ify([m['Version'] for m in release_set]))
+
+
+        

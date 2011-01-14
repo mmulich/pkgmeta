@@ -8,7 +8,7 @@ __all__ = ('MetadataRepository', 'ReleaseSet',)
 
 
 class ReleaseSet(list):
-    """A set of releases for a distribution.
+    """A set of releases for a distribution ordered by version number.
 
     Initialized by an optional list of dist-info directories.
     """
