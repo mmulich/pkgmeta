@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-import os
-from UserDict import IterableUserDict
-from distutils2.version import get_version_predicate
+from distutils2.errors import IrrationalVersionError
 from distutils2.metadata import DistributionMetadata as DM
+from distutils2.version import suggest_normalized_version
 
-__all__ = ('MetadataRepository', 'ReleaseSet',)
+__all__ = ('DistributionMetadata',)
+
+
+class InvalidVersion(Exception):
+    """An invalid version that can not be normalized by distutils2."""
 
 
 class DistributionMetadata(DM):
@@ -13,7 +16,11 @@ class DistributionMetadata(DM):
 
     @property
     def normalized_version(self):
-        return self.version
+        version = suggest_normalized_version(self.version)
+        if version is None:
+            raise InvalidVersion("cannot determine the normalized version "
+                                 "for:  %s" % self.version)
+        return version
 
     @property
     def _comparison_parts(self):
@@ -29,7 +36,9 @@ class DistributionMetadata(DM):
         return self._comparison_parts == other._comparison_parts
 
     def __lt__(self, other):
-        return False
+        if not isinstance(other, self.__class__):
+            self._cannot_compare(other)
+        return self._comparison_parts < other._comparison_parts
 
     def __ne__(self, other):
         return not self.__eq__(other)

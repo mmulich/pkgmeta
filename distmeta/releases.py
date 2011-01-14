@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from distutils2.metadata import DistributionMetadata
+from distmeta.metadata import DistributionMetadata
 
 __all__ = ('ReleaseSet',)
 
