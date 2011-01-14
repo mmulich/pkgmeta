@@ -1,50 +1,55 @@
 # -*- coding: utf-8 -*-
 import os
-from UserDict import IterableUserDict
-
+from UserDict import DictMixin
 from distmeta.releases import ReleaseSet
 
 __all__ = ('MetadataRepository',)
 
 
-class MetadataRepository(IterableUserDict):
+class MetadataRepository(DictMixin):
     """A repository of Python distribution metadata stored in a directory
     structure on the file system. The structure would organized by
     distribution name then by release (or version)."""
 
-    def __init__(self, location):
-        IterableUserDict.__init__(self)
-        self.location = location
-        if not os.path.exists(self.location):
-            raise Exception("Can't find the repository location at %s"
-                            % location)
+    def __init__(self, data=[]):
         #: Intialize the data in a dictionary of distribution names
         #  (keys) with a list of versions (values).
-        self._init_repo()
+        self._data = data
 
-    def _init_repo(self):
+    @classmethod
+    def from_path(cls, path):
         """Initialize the data in self._repo from a filesystem structure."""
-        if not os.path.isdir(self.location):
+        if not os.path.exists(path):
+            raise Exception("Can't find the repository location at %s"
+                            % location)
+        elif not os.path.isdir(path):
             raise Exception("Expected a distribution metadata structure at "
                             "%s, but found a file instead." % self.location)
-        for dist in os.listdir(self.location):
-            dist_path = os.path.join(self.location, dist)
-            if dist.startswith('.') \
-               or os.path.isfile(dist_path) \
-               or os.path.islink(dist_path):
-                #: Nevermind, it's not a distribution...
-                continue
-            for version in os.listdir(dist_path):
-                if dist not in self.data:
-                    self.data[dist] = []
-                metadata_file = os.path.join(dist_path, version, 'METADATA')
-                if os.path.exists(metadata_file):
-                    self.data[dist].append(version)
-                else:
-                    # XXX Need to warn the user that the metadata is missing!
-                    pass
+        structure = os.walk(path)
+        root, dist_dirs = structure.next()[:2]
+        data = [ReleaseSet.from_path(os.path.join(root, dist))
+                for dist in dist_dirs]
+        inst = cls(data)
+        inst.path = path
+        return inst
 
     def __repr__(self):
-        cls_name = self.__class__.__name__ 
-        abs_location = os.path.abspath(self.location)
-        return '%s("%s")' % (cls_name, abs_location)
+        cls_name = self.__class__.__name__
+        if hasattr(self, 'path'):
+            abs_location = os.path.abspath(self.path)
+            return '%s.from_path("%s")' % (cls_name, abs_location)
+        releases_repr = ', '.join([repr(x) for x in self._data])
+        return '<%s of %s>' % (cls_name, releases_repr)
+
+    def __getitem__(self, key):
+        release_set = None
+        for rs in self._data:
+            if rs.name == key:
+                release_set = rs
+                break
+        if not release_set:
+            raise KeyError("Release set for %s could not be found" % key)
+        return release_set
+
+    def keys(self):
+        return [rs.name for rs in self._data]

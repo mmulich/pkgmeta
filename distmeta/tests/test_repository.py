@@ -21,12 +21,12 @@ class TestMetadataRepository(BaseTestCase):
 
     def makeOne(self):
         from distmeta.repository import MetadataRepository
-        return MetadataRepository(self.repo_location)
+        return MetadataRepository.from_path(self.repo_location)
 
     def test_repr(self):
         # FIXME hardcoded class name
         self.assertEqual(repr(self.repo),
-                         'MetadataRepository("%s")' % self.repo_location)
+                         'MetadataRepository.from_path("%s")' % self.repo_location)
 
     def test_init(self):
         self.assertIn('solarcal', self.repo)
@@ -35,4 +35,3 @@ class TestMetadataRepository(BaseTestCase):
         releases = self.repo.get('solarcal', None)
         from distmeta.releases import ReleaseSet
         self.assertIsInstance(releases, ReleaseSet)
-        
