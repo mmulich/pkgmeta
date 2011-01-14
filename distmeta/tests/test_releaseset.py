@@ -17,7 +17,7 @@ class TestReleaseSet(BaseTestCase):
         super(TestReleaseSet, self).tearDown()
 
     def makeOne(self):
-        from distmeta import ReleaseSet
+        from distmeta.releases import ReleaseSet
         dist_name = SOAPBAR[0]['name']
         release_path = os.path.join(self.repo_location, dist_name)
         return ReleaseSet.from_path(release_path)
@@ -34,16 +34,13 @@ class TestReleaseSet(BaseTestCase):
             else:
                 n = 0
             return l[n:] + l[:n]
-        from distmeta import ReleaseSet
+        from distmeta.releases import ReleaseSet
         release_set = ReleaseSet(shift(self.release_set, 7))
         #: Reset the order via the private method called at __init__ time.
-        release_set._reorder()
+        release_set.sort()
         #: Check to see if the order is correct by rolling through the
         #  versions list.
         str_ify = lambda l: '|'.join(l)
         versions = SOAPBAR[1]
         self.assertEqual(str_ify(versions),
                          str_ify([m['Version'] for m in release_set]))
-
-
-        

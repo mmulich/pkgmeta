@@ -20,7 +20,7 @@ class TestMetadataRepository(BaseTestCase):
         super(TestMetadataRepository, self).tearDown()
 
     def makeOne(self):
-        from distmeta import MetadataRepository
+        from distmeta.repository import MetadataRepository
         return MetadataRepository(self.repo_location)
 
     def test_repr(self):
@@ -33,6 +33,6 @@ class TestMetadataRepository(BaseTestCase):
 
     def test_get(self):
         releases = self.repo.get('solarcal', None)
-        from distmeta import ReleaseSet
+        from distmeta.releases import ReleaseSet
         self.assertIsInstance(releases, ReleaseSet)
         
