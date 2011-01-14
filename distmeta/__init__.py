@@ -13,9 +13,33 @@ class ReleaseSet(list):
     Initialized by an optional list of dist-info directories.
     """
 
-    def __init__(self,  iterable=[]):
+    def __init__(self, iterable=[]):
         super(ReleaseSet, self).__init__(iterable)
-        
+        self._reorder()
+
+    def _reorder(self):
+        """Reorder the releases by version number from lowest (0) to highest.
+        """
+        pass
+
+    @classmethod
+    def from_path(cls, path):
+        """Initialize the set from a filesystem path."""
+        releases = []
+        for release in os.listdir(path):
+            metadata_file = os.path.join(path, release, 'METADATA')
+            metadata = DistributionMetadata(path=metadata_file)
+            releases.append(metadata)
+        return cls(releases)
+
+    @property
+    def name(self):
+        try:
+            name = self[0].get('Name')
+        except IndexError:
+            name = 'UNKNOWN'
+        return name
+
 
 class MetadataRepository(IterableUserDict):
     """A repository of Python distribution metadata stored in a directory
@@ -55,6 +79,6 @@ class MetadataRepository(IterableUserDict):
                     pass
 
     def __repr__(self):
-        class_name = self.__class__.__name__ 
+        cls_name = self.__class__.__name__ 
         abs_location = os.path.abspath(self.location)
-        return '%s("%s")' % (class_name, abs_location)
+        return '%s("%s")' % (cls_name, abs_location)

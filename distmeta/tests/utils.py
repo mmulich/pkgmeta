@@ -8,43 +8,52 @@ METADATA_FILENAME = 'METADATA'
 ALL_DISTS = []
 
 
-def _make_metadata(common, extended={}):
-    md = dict(common)
-    md.update(extended)
-    return DistributionMetadata(mapping=md)
+def _make_metadata(common, versions, extended={}):
+    md = common.copy()
+    items = []
+    for version in versions:
+        md['version'] = version
+        md.update(extended)
+        items.append(DistributionMetadata(mapping=md))
+    return items
 
 
-SOLARCAL = (_make_metadata({'name': 'solarcal',
-                            'version': '1.0',
-                            'summary': "Calendar based on solar dates.",
-                            'author': "Ra",
-                            }),
+# Examples are a three value tuple:
+# ({'name': "name", ...}, # (1)
+#  (version, ...), # (2)
+#  {"version": {'description': "special description", ...}, # (3)
+#  )
+#
+# 1) Common metadata dictionary
+# 2) Versions to create in increasing order
+# 3) An optional dictionary containing extra metadata keyed by version
+
+
+SOLARCAL = ({'name': 'solarcal',
+             'version': '1.0',
+             'summary': "Calendar based on solar dates.",
+             'author': "Ra",
+             },
+            ('1.0',),
             )
-ALL_DISTS.extend(SOLARCAL)
+ALL_DISTS.append(SOLARCAL)
 
-common = {'name': 'soapbar',
-          'description': "Optimized SOAP library.",
-          'author': "Rubber Ducky",
-          }
-SOAPBAR = (_make_metadata(common, {'version': '4.0'}),
-           _make_metadata(common, {'version': '4.0.1'}),
-           _make_metadata(common, {'version': '4.1'}),
-           _make_metadata(common, {'version': '5.0.1'}),
-           _make_metadata(common, {'version': '5.1'}),
-           _make_metadata(common, {'version': '5.2'}),
-           _make_metadata(common, {'version': '5.2.1'}),
-           _make_metadata(common, {'version': '5.3'}),
-           _make_metadata(common, {'version': '6.0'}),
-           _make_metadata(common, {'version': '6.0.1'}),
-           _make_metadata(common, {'version': '6.0.2'}),
-           _make_metadata(common, {'version': '6.1'},)
+SOAPBAR = ({'name': 'soapbar',
+            'description': "Optimized SOAP library.",
+            'author': "Rubber Ducky",
+            },
+           ('4.0', '4.0.1', '4.1', '5.0.1', '5.1', '5.2', '5.2.1', '5.3', '6.0', '6.0.1', '6.0.2', '6.1'),
            )
-ALL_DISTS.extend(SOAPBAR)
+ALL_DISTS.append(SOAPBAR)
+
 
 def populate_repo(inhabitants, root=None):
+    converted_inhabitants = []
+    for i in inhabitants:
+        converted_inhabitants.extend(_make_metadata(*i))
     if root is None:
         root = mkdtemp()
-    for metadata in inhabitants:
+    for metadata in converted_inhabitants:
         name = metadata['Name']
         version = metadata['Version']
         #: Write the file out to the filesystem under the
