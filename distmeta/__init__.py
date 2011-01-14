@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 from UserDict import IterableUserDict
+from distutils2.version import get_version_predicate
 from distutils2.metadata import DistributionMetadata
 
-__all__ = ('MetadataRepository',)
+__all__ = ('MetadataRepository', 'ReleaseSet',)
 
 
 class ReleaseSet(list):
@@ -12,9 +13,9 @@ class ReleaseSet(list):
     Initialized by an optional list of dist-info directories.
     """
 
-    def __init__(self, iterable=[]):
+    def __init__(self,  iterable=[]):
         super(ReleaseSet, self).__init__(iterable)
-
+        
 
 class MetadataRepository(IterableUserDict):
     """A repository of Python distribution metadata stored in a directory

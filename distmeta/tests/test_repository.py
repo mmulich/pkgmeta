@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 import os
+import tempfile
+import shutil
 from distmeta.tests import unittest
+from distmeta.tests.utils import populate_repo, ALL_DISTS
 
-HERE = os.path.abspath(os.path.dirname(__file__))
-REPO = os.path.join(HERE, 'metadata_repo')
 
 class BaseTestCase(unittest.TestCase):
     """Base test case to set up the repository examples."""
 
     def setUp(self):
-        self.repo_location = REPO
+        self.repo_location = tempfile.mkdtemp('-repo', 'dist-metadata-')
 
     def tearDown(self):
-        pass
+        shutil.rmtree(self.repo_location)
 
 
 class TestReleaseSet(BaseTestCase):
@@ -27,12 +28,21 @@ class TestMetadataRepository(BaseTestCase):
 
     def setUp(self):
         super(TestMetadataRepository, self).setUp()
-        from distmeta import MetadataRepository
-        self.repo = MetadataRepository(self.repo_location)
+        populate_repo(ALL_DISTS, self.repo_location)
+        self.repo = self.makeOne()
 
     def tearDown(self):
         del self.repo
         super(TestMetadataRepository, self).tearDown()
+
+    def makeOne(self):
+        from distmeta import MetadataRepository
+        return MetadataRepository(self.repo_location)
+
+    def test_repr(self):
+        # FIXME hardcoded class name
+        self.assertEqual(repr(self.repo),
+                         'MetadataRepository("%s")' % self.repo_location)
 
     def test_init(self):
         self.assertIn('solarcal', self.repo)
@@ -41,4 +51,3 @@ class TestMetadataRepository(BaseTestCase):
         releases = self.repo.get('solarcal', None)
         from distmeta import ReleaseSet
         self.assertIsInstance(releases, ReleaseSet)
-        import ipdb; ipdb.set_trace()
