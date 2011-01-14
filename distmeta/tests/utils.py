@@ -8,7 +8,9 @@ METADATA_FILENAME = 'METADATA'
 ALL_DISTS = []
 
 
-def _make_metadata(md):
+def _make_metadata(common, extended={}):
+    md = dict(common)
+    md.update(extended)
     return DistributionMetadata(mapping=md)
 
 
@@ -20,6 +22,24 @@ SOLARCAL = (_make_metadata({'name': 'solarcal',
             )
 ALL_DISTS.extend(SOLARCAL)
 
+common = {'name': 'soapbar',
+          'description': "Optimized SOAP library.",
+          'author': "Rubber Ducky",
+          }
+SOAPBAR = (_make_metadata(common, {'version': '4.0'}),
+           _make_metadata(common, {'version': '4.0.1'}),
+           _make_metadata(common, {'version': '4.1'}),
+           _make_metadata(common, {'version': '5.0.1'}),
+           _make_metadata(common, {'version': '5.1'}),
+           _make_metadata(common, {'version': '5.2'}),
+           _make_metadata(common, {'version': '5.2.1'}),
+           _make_metadata(common, {'version': '5.3'}),
+           _make_metadata(common, {'version': '6.0'}),
+           _make_metadata(common, {'version': '6.0.1'}),
+           _make_metadata(common, {'version': '6.0.2'}),
+           _make_metadata(common, {'version': '6.1'},)
+           )
+ALL_DISTS.extend(SOAPBAR)
 
 def populate_repo(inhabitants, root=None):
     if root is None:
