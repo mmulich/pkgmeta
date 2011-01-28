@@ -13,11 +13,14 @@ where it can be found. This information can then be used to find distributions
 and their dependencies without actually acquiring (e.g. downloading) the
 distribution itself.
 
-The repository does not actually hold any distribution data. That type of information can be found via more established means, such as `PyPI <http://pypi.pythong.org/pypi/`.
+The repository does not actually hold any distribution data. That type of
+information can be found via more established means, such as `PyPI
+<http://pypi.pythong.org/pypi/>`_.
 
 The repository holds information in Metadata 1.2 (:pep:`345`) format. This is
 the native format used by `Distutils2
-<http://pypi.python.org/pypi/Distutils2/>`. With a lot of pain and tears, lesser Metadata formats can be transitioned to Metadata 1.2.
+<http://pypi.python.org/pypi/Distutils2/>`_. With a lot of pain and tears,
+lesser Metadata formats can be transitioned to Metadata 1.2.
 
 Contents:
 
