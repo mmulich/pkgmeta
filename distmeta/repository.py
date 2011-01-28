@@ -7,6 +7,10 @@ from distmeta.releases import ReleaseSet
 __all__ = ('MetadataRepository',)
 
 
+class RepositoryIsNotMutable(Exception):
+    """Repositories are not mutable once they have been read in."""
+
+
 class MetadataRepository(object, DictMixin):
     """A repository of Python distribution metadata stored in a directory
     structure on the file system. The structure would organized by
@@ -42,6 +46,8 @@ class MetadataRepository(object, DictMixin):
         releases_repr = ', '.join([repr(x) for x in self._data])
         return '<%s of %s>' % (cls_name, releases_repr)
 
+    # Container emulation:
+    # http://docs.python.org/reference/datamodel.html#emulating-container-types
     def __setitem__(self, key, value):
         if key in self:
             raise NotImplementedError("Not sure what to do yet.")
@@ -62,5 +68,20 @@ class MetadataRepository(object, DictMixin):
             raise KeyError("Release set for %s could not be found" % key)
         return release_set
 
+    def __delitem__(self, key):
+        raise RepositoryIsNotMutable("This repository is read-only.")
+
     def keys(self):
         return [rs.name for rs in self._data]
+
+    # Public API
+    def search(self, search_callable, property_names=['name']):
+        if not callable(search_callable):
+            raise TypeError()
+        if not hasattr(property_names, '__iter__'):
+            property_names = [property_names]
+        search_results = []
+        for prop in property_names:
+            search_results.extend([rs for rs in self._data
+                                   if search_callable(getattr(rs, prop))])
+        return set(search_results)

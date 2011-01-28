@@ -37,4 +37,23 @@ class TestMetadataRepository(BaseTestCase):
         self.assertIsInstance(releases, ReleaseSet)
         #: It'd be easier to do this with the with statement, but it's not
         #  Python <2.6 compatible.
-        self.assertRaises(KeyError, lambda a: self.repo[a], ('bogus')) 
+        self.assertRaises(KeyError, lambda a: self.repo[a], ('bogus'))
+        
+    def test_search(self):
+        self.assertRaises(TypeError, self.repo.search, ('cal',))
+        cal_search = lambda s: s.find('cal') >= 0
+        cal_results = [rs.name for rs in self.repo.search(cal_search)]
+        self.assertTrue('solarcal' in cal_results,
+                        "Expected to find solarcal in the search results.")
+        #: The following search is also looking for the distributions that
+        #  provide 'soap'
+        soap_search = lambda s: s.find('soap') >= 0
+        soap_results = [(rs.name, type(rs),)
+                        for rs in self.repo.search(soap_search)]
+        from distmeta.releases import ProvidedReleaseSet
+        self.assertTrue(('soap', ProvidedReleaseSet,) in soap_results,
+                        "Expected to find a provided soap release in the"
+                        "search results.")
+        
+
+

@@ -30,6 +30,12 @@ class ReleaseSet(list):
             releases.append(metadata)
         return cls(releases)
 
+    def __hash__(self):
+        release_hash = 0
+        for release in self:
+            release_hash += hash(release)
+        return len(self) + release_hash
+
     @property
     def name(self):
         try:
@@ -37,3 +43,8 @@ class ReleaseSet(list):
         except IndexError:
             name = 'UNKNOWN'
         return name
+
+
+class ProvidedReleaseSet(object):
+    """A release that has been provided by one or more distributions. Also
+    known as a virtual release."""
