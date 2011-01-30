@@ -14,6 +14,8 @@ class ReleaseSet(list):
     def __init__(self, iterable=[]):
         super(ReleaseSet, self).__init__(iterable)
         self._reorder()
+        # FIXME: Find a better way to determine the stable release.
+        self._stable_release = len(self) - 1
 
     def _reorder(self):
         """Reorder the releases by version number from lowest (0) to highest.
@@ -39,12 +41,7 @@ class ReleaseSet(list):
     @property
     def name(self):
         try:
-            name = self[0].get('Name')
+            name = self[self._stable_release].get('Name')
         except IndexError:
             name = 'UNKNOWN'
         return name
-
-
-class ProvidedReleaseSet(object):
-    """A release that has been provided by one or more distributions. Also
-    known as a virtual release."""

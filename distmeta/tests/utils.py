@@ -9,12 +9,13 @@ ALL_DISTS = []
 
 
 def _make_metadata(common, versions, extended={}):
-    md = common.copy()
+    mapping = common.copy()
     items = []
     for version in versions:
-        md['version'] = version
-        md.update(extended)
-        items.append(DistributionMetadata(mapping=md))
+        mapping['version'] = version
+        if version in extended:
+            mapping.update(extended[version])
+        items.append(DistributionMetadata(mapping=mapping))
     return items
 
 
@@ -48,6 +49,14 @@ SOAPBAR = ({'name': 'soapbar',
            )
 ALL_DISTS.append(SOAPBAR)
 
+SHAMPOO = ({'name': 'shampoo',
+            'description': "SOAP library tailored for use with the Hair API.",
+            'author': "Shamu",
+            },
+           ('1.0',),
+           {'1.0': dict(provides_dist=['soapbar (>=5.0)'])}
+           )
+ALL_DISTS.append(SHAMPOO)
 
 def populate_repo(inhabitants, root=None):
     converted_inhabitants = []
