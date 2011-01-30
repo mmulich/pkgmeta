@@ -79,8 +79,8 @@ WATERWEB = ({'name': 'waterweb',
             {'5.0': waterweb_5_0__extends,
              '6.0': waterweb_5_0__extends,
              '7.0': waterweb_5_0__extends,
-             # 8.0 conflicts with fireweb, but we lack a metadata expression
-             # that can say a distribution conflicts with another.
+             #: 8.0 conflicts with fireweb, but we lack a metadata expression
+             #  that can say a distribution conflicts with another.
              '8.0': dict(provides_dist=['earthweb (>=3.0)'],
                          ##obsoletes_dist='fireweb',
                          ),
@@ -88,14 +88,38 @@ WATERWEB = ({'name': 'waterweb',
             )
 ALL_DISTS.append(WATERWEB)
 
-EARTHWEB = None
-##ALL_DISTS.append(EARTHWEB)
+EARTHWEB = ({'name': 'earthweb',
+             'description': "An earth based web framework",
+             'author': "Joe Dirt",
+             },
+            ('1.0', '2.0', '3.0'),
+            )
+ALL_DISTS.append(EARTHWEB)
 
-FIREWEB = None
-##ALL_DISTS.append(FIREWEB)
+FIREWEB = ({'name': 'fireweb',
+            'description': "A fire based web framework to burn all others",
+            'author': "Logi",
+            'provides_dist': ['waterweb (>=7.0,<8.0)',
+                              #: Wouldn't it be nice to say provides soap?
+                              'soapbar (>=6.1)',
+                              'soapbubble (>=6.0)',
+                              'earthweb (>=2.0)',
+                              ],
+            'obsoletes_dist': ['earthweb (>=2.0)'],
+            },
+           ('1.0',),
+           )
+ALL_DISTS.append(FIREWEB)
 
-BIGBOX = None
-##ALL_DISTS.append(BIGBOX)
+BIGBOX = ({'name': 'bigbox',
+           'description': "A big box for all kinds of data",
+           'author': "Roogle",
+           'provides_dist': ['sandbox (>=4.0,<5.0)'],
+           'obsoletes_dist': ['sandbox (>=4.0,<5.0)'],
+           },
+          ('1.0',),
+          )
+ALL_DISTS.append(BIGBOX)
 
 WEBCAL = ({'name': 'webcal',
            'description': "Web calendaring application",
@@ -107,17 +131,20 @@ WEBCAL = ({'name': 'webcal',
           {'1.0': dict(requires_dist=['solarcal',
                                       'sandbox (>=3.0)',
                                       'waterweb (>=5.0)',
-                                      'soapbar (>=4.0)']),
+                                      'soapbar (>=4.0)',
+                                      ]),
            '2.0': dict(requires_dist=['solarcal',
+                                      #: Provided by bigbox
                                       'sandbox (>=4.0)',
                                       'waterweb (>=7.0)',
-                                      'soapbar (>=5.0.3,<6.0)']),
+                                      'soapbar (>=5.0.3,<6.0)',
+                                      ]),
            '3.0': dict(requires_dist=['solarcal',
-                                      'bigbox',
-                                      # fireweb provides waterweb and soapbar
-                                      # at the following versions.
-                                      'waterweb (>=8.0)'
-                                      'soapbar (>=6.1)']),
+                                      'sandbox (>=4.0)',
+                                      #: Both provided by fireweb
+                                      'waterweb (>=8.0)',
+                                      'soapbar (>=6.1)',
+                                      ]),
            }
           )
 ALL_DISTS.append(WEBCAL)
