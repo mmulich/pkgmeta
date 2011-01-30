@@ -49,14 +49,78 @@ SOAPBAR = ({'name': 'soapbar',
            )
 ALL_DISTS.append(SOAPBAR)
 
-SHAMPOO = ({'name': 'shampoo',
-            'description': "SOAP library tailored for use with the Hair API.",
-            'author': "Shamu",
+soapbubble__versions = ('4.0', '5.0', '5.1', '5.2', '5.3', '6.0', '6.1')
+soapbubble__extends = dict([(v, dict(provides_dist=['soapbar (>=%s)' % v]),)
+                                for v in soapbubble__versions])
+SOAPBUBBLE = ({'name': 'soapbubble',
+               'description': "A lightweight SOAP library in pure Python",
+               'author': "Scrubbing Bubble and Rubber Ducky",
+               },
+              soapbubble__versions,
+              soapbubble__extends,
+              )
+ALL_DISTS.append(SOAPBUBBLE)
+
+SANDBOX = ({'name': 'sandbox',
+            'description': "A prototyping database that has the " \
+                           "UniversalDB API",
+            'author': "Baby Goob",
             },
-           ('1.0',),
-           {'1.0': dict(provides_dist=['soapbar (>=5.0)'])}
+           ('1.0', '2.0', '3.0', '4.0'),
            )
-ALL_DISTS.append(SHAMPOO)
+ALL_DISTS.append(SANDBOX)
+
+waterweb_5_0__extends = dict(provides_dist=['earthweb (>=2.0)'])
+WATERWEB = ({'name': 'waterweb',
+             'description': "A water based web framework",
+             'author': "Fireman John",
+             },
+            ('2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0'),
+            {'5.0': waterweb_5_0__extends,
+             '6.0': waterweb_5_0__extends,
+             '7.0': waterweb_5_0__extends,
+             # 8.0 conflicts with fireweb, but we lack a metadata expression
+             # that can say a distribution conflicts with another.
+             '8.0': dict(provides_dist=['earthweb (>=3.0)'],
+                         ##obsoletes_dist='fireweb',
+                         ),
+             },
+            )
+ALL_DISTS.append(WATERWEB)
+
+EARTHWEB = None
+##ALL_DISTS.append(EARTHWEB)
+
+FIREWEB = None
+##ALL_DISTS.append(FIREWEB)
+
+BIGBOX = None
+##ALL_DISTS.append(BIGBOX)
+
+WEBCAL = ({'name': 'webcal',
+           'description': "Web calendaring application",
+           'author': "Hathor",
+           },
+          ('1.0', '2.0', '3.0',),
+          # TODO: Change soapbar to soapbubble, because it's the prototyping
+          #       library in this scenario.
+          {'1.0': dict(requires_dist=['solarcal',
+                                      'sandbox (>=3.0)',
+                                      'waterweb (>=5.0)',
+                                      'soapbar (>=4.0)']),
+           '2.0': dict(requires_dist=['solarcal',
+                                      'sandbox (>=4.0)',
+                                      'waterweb (>=7.0)',
+                                      'soapbar (>=5.0.3,<6.0)']),
+           '3.0': dict(requires_dist=['solarcal',
+                                      'bigbox',
+                                      # fireweb provides waterweb and soapbar
+                                      # at the following versions.
+                                      'waterweb (>=8.0)'
+                                      'soapbar (>=6.1)']),
+           }
+          )
+ALL_DISTS.append(WEBCAL)
 
 def populate_repo(inhabitants, root=None):
     converted_inhabitants = []
