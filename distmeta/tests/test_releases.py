@@ -2,7 +2,8 @@
 import os
 from distmeta.tests import unittest
 from distmeta.tests.base import BaseTestCase
-from distmeta.tests.utils import populate_repo, SOAPBAR
+from distmeta.tests.mock_metadata import SOAPBAR
+from distmeta.tests.utils import populate_repo
 
 
 class TestReleaseSet(BaseTestCase):
