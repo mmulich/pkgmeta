@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 from packaging.errors import IrrationalVersionError
-from packaging.metadata import DistributionMetadata as DM
+from packaging.metadata import Metadata as BaseMetadata
 from packaging.version import suggest_normalized_version, NormalizedVersion
 
-__all__ = ('DistributionMetadata',)
+__all__ = ('Metadata',)
 
 
 class InvalidVersion(Exception):
     """An invalid version that can not be normalized by packaging."""
 
 
-class DistributionMetadata(DM):
-    """Subclass of packaging.metadata.DistributionMetadata to add comparison
+class Metadata(BaseMetadata):
+    """Subclass of packaging.metadata.Metadata to add comparison
     operators."""
 
     def __repr__(self):
         name = self.get('Name')
         version = self.get('Version')
-        return "<DistributionMetadata \"%s (%s)\">" % (name, version)
+        return "<Metadata \"%s (%s)\">" % (name, version)
 
     @property
     def normalized_version(self):
@@ -58,5 +58,5 @@ class DistributionMetadata(DM):
         return self.__eq__(other) or self.__gt__(other)
 
     # See http://docs.python.org/reference/datamodel#object.__hash__
-    ##def __hash__(self):
-    ##    return hash(self.normalized_version)
+    def __hash__(self):
+        return hash(self.normalized_version)
