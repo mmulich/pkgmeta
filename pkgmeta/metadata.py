@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-from distutils2.errors import IrrationalVersionError
-from distutils2.metadata import DistributionMetadata as DM
-from distutils2.version import suggest_normalized_version, NormalizedVersion
+from packaging.errors import IrrationalVersionError
+from packaging.metadata import DistributionMetadata as DM
+from packaging.version import suggest_normalized_version, NormalizedVersion
 
 __all__ = ('DistributionMetadata',)
 
 
 class InvalidVersion(Exception):
-    """An invalid version that can not be normalized by distutils2."""
+    """An invalid version that can not be normalized by packaging."""
 
 
 class DistributionMetadata(DM):
-    """Subclass of distutils2.metadata.DistributionMetadata to add comparison
+    """Subclass of packaging.metadata.DistributionMetadata to add comparison
     operators."""
 
     def __repr__(self):

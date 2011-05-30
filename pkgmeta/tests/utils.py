@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from tempfile import mkdtemp
-from distutils2.metadata import DistributionMetadata
+from packaging.metadata import DistributionMetadata
 
 METADATA_FILENAME = 'METADATA'
 

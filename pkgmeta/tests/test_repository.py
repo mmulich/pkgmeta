@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-from distmeta.tests import unittest
-from distmeta.tests.base import BaseTestCase
-from distmeta.tests.mock_metadata import ALL_DISTS
-from distmeta.tests.utils import populate_repo
+from pkgmeta.tests import unittest
+from pkgmeta.tests.base import BaseTestCase
+from pkgmeta.tests.mock_metadata import ALL_DISTS
+from pkgmeta.tests.utils import populate_repo
 
 
 class TestMetadataRepository(BaseTestCase):
@@ -21,7 +21,7 @@ class TestMetadataRepository(BaseTestCase):
         super(TestMetadataRepository, self).tearDown()
 
     def makeOne(self):
-        from distmeta.repository import MetadataRepository
+        from pkgmeta.repository import MetadataRepository
         return MetadataRepository.from_path(self.repo_location)
 
     def test_repr(self):
@@ -34,7 +34,7 @@ class TestMetadataRepository(BaseTestCase):
 
     def test_get(self):
         releases = self.repo.get('solarcal', None)
-        from distmeta.releases import ReleaseSet
+        from pkgmeta.releases import ReleaseSet
         self.assertIsInstance(releases, ReleaseSet)
         #: It'd be easier to do this with the with statement, but it's not
         #  Python <2.6 compatible.

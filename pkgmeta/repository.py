@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 from UserDict import DictMixin
-from distmeta.metadata import DistributionMetadata
-from distmeta.releases import ReleaseSet
+from pkgmeta.metadata import DistributionMetadata
+from pkgmeta.releases import ReleaseSet
 
 __all__ = ('MetadataRepository',)
 

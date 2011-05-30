@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-from distmeta.tests import unittest
-from distmeta.tests.base import BaseTestCase
-from distmeta.tests.mock_metadata import SOAPBAR
-from distmeta.tests.utils import populate_repo
+from pkgmeta.tests import unittest
+from pkgmeta.tests.base import BaseTestCase
+from pkgmeta.tests.mock_metadata import SOAPBAR
+from pkgmeta.tests.utils import populate_repo
 
 
 class TestReleaseSet(BaseTestCase):
@@ -18,7 +18,7 @@ class TestReleaseSet(BaseTestCase):
         super(TestReleaseSet, self).tearDown()
 
     def makeOne(self):
-        from distmeta.releases import ReleaseSet
+        from pkgmeta.releases import ReleaseSet
         dist_name = SOAPBAR[0]['name']
         release_path = os.path.join(self.repo_location, dist_name)
         return ReleaseSet.from_path(release_path)
@@ -35,7 +35,7 @@ class TestReleaseSet(BaseTestCase):
             else:
                 n = 0
             return l[n:] + l[:n]
-        from distmeta.releases import ReleaseSet
+        from pkgmeta.releases import ReleaseSet
         release_set = ReleaseSet(shift(self.release_set, 7))
         #: Reset the order via the private method called at __init__ time.
         release_set.sort()

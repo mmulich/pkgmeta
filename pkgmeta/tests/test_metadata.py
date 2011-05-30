@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from distmeta.tests import unittest
+from pkgmeta.tests import unittest
 
 
 class TestDistributionMetadataComparisons(unittest.TestCase):
     """Test for metadata version comparison functionality."""
 
     def makeOne(self, **kwargs):
-        from distmeta.metadata import DistributionMetadata
+        from pkgmeta.metadata import DistributionMetadata
         return DistributionMetadata(**kwargs)
 
     def test_equal(self):

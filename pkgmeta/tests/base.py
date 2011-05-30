@@ -2,7 +2,7 @@
 import os
 import tempfile
 import shutil
-from distmeta.tests import unittest
+from pkgmeta.tests import unittest
 
 
 class BaseTestCase(unittest.TestCase):
