@@ -2,12 +2,12 @@
 from pkgmeta.tests import unittest
 
 
-class TestDistributionMetadataComparisons(unittest.TestCase):
+class TestMetadataComparisons(unittest.TestCase):
     """Test for metadata version comparison functionality."""
 
     def makeOne(self, **kwargs):
-        from pkgmeta.metadata import DistributionMetadata
-        return DistributionMetadata(**kwargs)
+        from pkgmeta.metadata import Metadata
+        return Metadata(**kwargs)
 
     def test_equal(self):
         #: Set up the metadata objects.

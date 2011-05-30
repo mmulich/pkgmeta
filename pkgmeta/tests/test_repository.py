@@ -21,13 +21,13 @@ class TestMetadataRepository(BaseTestCase):
         super(TestMetadataRepository, self).tearDown()
 
     def makeOne(self):
-        from pkgmeta.repository import MetadataRepository
-        return MetadataRepository.from_path(self.repo_location)
+        from pkgmeta.repository import Repository
+        return Repository.from_directory(self.repo_location)
 
     def test_repr(self):
         # FIXME hardcoded class name
-        self.assertEqual(repr(self.repo),
-                         'MetadataRepository.from_path("%s")' % self.repo_location)
+        self.assertEqual(repr(self.repo), 'Repository.from_directory("%s")' \
+                         % self.repo_location)
 
     def test_init(self):
         self.assertIn('solarcal', self.repo)

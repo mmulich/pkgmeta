@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from tempfile import mkdtemp
-from packaging.metadata import DistributionMetadata
+from packaging.metadata import Metadata
 
 METADATA_FILENAME = 'METADATA'
 
@@ -13,7 +13,7 @@ def _make_metadata(common, versions, extended={}):
         mapping['version'] = version
         if version in extended:
             mapping.update(extended[version])
-        items.append(DistributionMetadata(mapping=mapping))
+        items.append(Metadata(mapping=mapping))
     return items
 
 
