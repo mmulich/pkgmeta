@@ -10,22 +10,21 @@ class TestReleaseSet(BaseTestCase):
 
     def setUp(self):
         super(TestReleaseSet, self).setUp()
-        populate_repo([SOAPBAR], self.repo_location)
-        self.release_set = self.makeOne()
+        populate_repo([SOAPBAR], self.repo_directory)
 
     def tearDown(self):
-        del self.release_set
         super(TestReleaseSet, self).tearDown()
 
     def makeOne(self):
         from pkgmeta.releases import ReleaseSet
         dist_name = SOAPBAR[0]['name']
-        release_path = os.path.join(self.repo_location, dist_name)
+        release_path = os.path.join(self.repo_directory, dist_name)
         return ReleaseSet.from_directory(release_path)
 
     def test_from_directory(self):
+        release_set = self.makeOne()
         release_count = len(SOAPBAR[1])
-        self.assertEqual(len(self.release_set), release_count)
+        self.assertEqual(len(release_set), release_count)
 
     def test_order(self):
         #: Ensure they are out of order first by shifting them.
@@ -36,7 +35,8 @@ class TestReleaseSet(BaseTestCase):
                 n = 0
             return l[n:] + l[:n]
         from pkgmeta.releases import ReleaseSet
-        release_set = ReleaseSet(shift(self.release_set.releases, 7))
+        orig_release_set = self.makeOne()
+        release_set = ReleaseSet(shift(orig_release_set.releases, 7))
         #: Reset the order via the private method called at __init__ time.
         release_set._reorder()
         #: Check to see if the order is correct by rolling through the

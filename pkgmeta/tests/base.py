@@ -9,7 +9,10 @@ class BaseTestCase(unittest.TestCase):
     """Base test case to set up the repository location."""
 
     def setUp(self):
-        self.repo_location = tempfile.mkdtemp('-repo', 'dist-metadata-')
+        self.repo_directory = tempfile.mkdtemp('-repo', 'pkg-metadata-')
+        nil, self.repo_pickle = tempfile.mkstemp('.pickle', 'pkg-metadata-')
+        del nil
 
     def tearDown(self):
-        shutil.rmtree(self.repo_location)
+        shutil.rmtree(self.repo_directory)
+        os.remove(self.repo_pickle)

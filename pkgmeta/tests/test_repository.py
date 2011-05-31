@@ -13,36 +13,39 @@ class TestMetadataRepository(BaseTestCase):
 
     def setUp(self):
         super(TestMetadataRepository, self).setUp()
-        populate_repo(ALL_DISTS, self.repo_location)
-        self.repo = self.makeOne()
+        populate_repo(ALL_DISTS, self.repo_directory)
 
-    def tearDown(self):
-        del self.repo
-        super(TestMetadataRepository, self).tearDown()
-
-    def makeOne(self):
+    def makeOne(self, location=None):
         from pkgmeta.repository import Repository
-        return Repository.from_directory(self.repo_location)
+        if location is None:
+            return Repository()
+        return Repository.from_directory(location)
 
     def test_repr(self):
-        # FIXME hardcoded class name
-        self.assertEqual(repr(self.repo), 'Repository.from_directory("%s")' \
-                         % self.repo_location)
+        # Check representation from a blank instance.
+        repo = self.makeOne()
+        self.assertEqual(repr(repo), '<Repository of >')
+        # Check representation from a repository instance created from a
+        # directory location.
+        repo_from_directory = self.makeOne(self.repo_directory)
+        self.assertEqual(repr(repo_from_directory),
+                         'Repository.from_directory("{0}")'.format(self.repo_directory))
 
     def test_init(self):
-        self.assertIn('solarcal', self.repo)
+        repo = self.makeOne(self.repo_directory)
+        self.assertIn('solarcal', repo)
 
     def test_get(self):
-        releases = self.repo.get('solarcal', None)
+        repo = self.makeOne(self.repo_directory)
+        releases = repo.get('solarcal', None)
         from pkgmeta.releases import ReleaseSet
         self.assertIsInstance(releases, ReleaseSet)
-        #: It'd be easier to do this with the with statement, but it's not
-        #  Python <2.6 compatible.
-        self.assertRaises(KeyError, lambda a: self.repo[a], ('bogus'))
+        self.assertRaises(KeyError, lambda a: repo[a], ('bogus'))
         
     def test_search(self):
-        self.assertRaises(TypeError, self.repo.search, ('cal',))
+        repo = self.makeOne(self.repo_directory)
+        self.assertRaises(TypeError, repo.search, ('cal',))
         cal_search = lambda s: s.find('cal') >= 0
-        cal_results = [rs.name for rs in self.repo.search(cal_search)]
+        cal_results = [rs.name for rs in repo.search(cal_search)]
         self.assertTrue('solarcal' in cal_results,
                         "Expected to find solarcal in the search results.")
