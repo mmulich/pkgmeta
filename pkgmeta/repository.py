@@ -8,7 +8,7 @@ except ImportError:
 
 from pkgmeta.metadata import Metadata
 from pkgmeta.releases import ReleaseSet
-from pkgmeta.exectpions import RepositoryIsNotMutable
+from pkgmeta.exceptions import RepositoryIsNotMutable
 
 __all__ = ('Repository',)
 
