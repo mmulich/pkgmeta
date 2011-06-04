@@ -13,20 +13,28 @@ DEFAULT_CONFIG = None
 
 class CommandRegistry(MutableMapping):
     """A registry of commands added by name."""
-    data = {}
+    cmds = {}  # Instantiated subcommand
+    cmd_clses = {}  # Subcommand classes
     def __getitem__(self, key):
-        return self.data[key]
+        return self.cmds[key]
     def __setitem__(self, key, value):
-        self.data[key] = value
+        self.cmds[key] = value
     def __delitem__(self, key):
-        del self.data[key]
+        del self.cmds[key]
     def __iter__(self):
-        self.data.__iter__()
+        self.cmds.__iter__()
     def __len__(self):
         return len(self.data)
 
-    def add(self, c):
-        self[c.name] = c
+    def add(self, cls):
+        self.cmd_clses[cls.name] = cls
+
+    def init_subcommands(self, subparsers):
+        """Command initiallization using an argparse subparsers object."""
+        if not isinstance(subparsers, argparse._SubParsersAction):
+            raise TypeError("Expected an argparse._SubParsersAction object")
+        for name, command_class in self.cmd_clses.items():
+            self.cmds[name] = command_class(subparsers)
 
 commands = CommandRegistry()
 
@@ -39,6 +47,9 @@ class BaseCommand:
     """Base sub-command class"""
 
     name = None
+
+    def __init__(self, subparsers):
+        command_parser = subparsers.add_parser(self.name, help=self.__doc__)
 
     def __call__(self, namespace):
         self.cmd(namespace)
@@ -57,11 +68,11 @@ class UpdateCommand(BaseCommand):
         the repository."""
         pass
 
-commands.add(UpdateCommand())
+commands.add(UpdateCommand)
 
 
 class SearchCommand(BaseCommand):
-    """Search the repository"""
+    """Search the repository for packages"""
     name = 'search'
 
     def cmd(self, namespace):
@@ -69,7 +80,7 @@ class SearchCommand(BaseCommand):
         print(self.name)
         pass
 
-commands.add(SearchCommand())
+commands.add(SearchCommand)
 
 
 class ShowCommand(BaseCommand):
@@ -79,7 +90,7 @@ class ShowCommand(BaseCommand):
     def cmd(self, namespace):
         pass
 
-commands.add(ShowCommand())
+commands.add(ShowCommand)
 
 
 def main():
@@ -93,12 +104,13 @@ def main():
     subparsers = parser.add_subparsers(dest="command",
                                        help="sub-commands, use --help with "
                                        "action for more help")
-    parser_search = subparsers.add_parser('search',
-                                          help="search the repository")
-    parser_update = subparsers.add_parser('update',
-                                          help="update the repository")
-    parser_search.add_argument('search-terms', nargs='+',
-                               help="list of of search criteria")
+    commands.init_subcommands(subparsers)
+    # parser_search = subparsers.add_parser('search',
+    #                                       help="search the repository")
+    # parser_update = subparsers.add_parser('update',
+    #                                       help="update the repository")
+    # parser_search.add_argument('search-terms', nargs='+',
+    #                            help="list of of search criteria")
     args = parser.parse_args()
 
     # Process action
