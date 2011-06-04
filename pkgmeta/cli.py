@@ -49,7 +49,8 @@ class BaseCommand:
     name = None
 
     def __init__(self, subparsers):
-        command_parser = subparsers.add_parser(self.name, help=self.__doc__)
+        self.command_parser = subparsers.add_parser(self.name,
+                                                    help=self.__doc__)
 
     def __call__(self, namespace):
         self.cmd(namespace)
@@ -74,6 +75,11 @@ commands.add(UpdateCommand)
 class SearchCommand(BaseCommand):
     """Search the repository for packages"""
     name = 'search'
+
+    def __init__(self, subparsers):
+        super(SearchCommand, self).__init__(subparsers)
+        self.command_parser.add_argument('search-terms', nargs='+',
+                                         help="list of of search criteria")
 
     def cmd(self, namespace):
         
@@ -105,12 +111,7 @@ def main():
                                        help="sub-commands, use --help with "
                                        "action for more help")
     commands.init_subcommands(subparsers)
-    # parser_search = subparsers.add_parser('search',
-    #                                       help="search the repository")
-    # parser_update = subparsers.add_parser('update',
-    #                                       help="update the repository")
-    # parser_search.add_argument('search-terms', nargs='+',
-    #                            help="list of of search criteria")
+
     args = parser.parse_args()
 
     # Process action
