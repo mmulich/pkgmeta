@@ -1,0 +1,3 @@
+{userbase}/lib/python{py_version_short}/pkgmeta/sources.list
+/etc/pkgmeta/sources.list
+{pkgmeta_home}/base_config/sources.list

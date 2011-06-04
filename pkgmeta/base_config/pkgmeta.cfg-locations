@@ -1,0 +1,3 @@
+{userbase}/lib/python{py_short_version}/pkgmeta.cfg
+/etc/pkgmeta/pkgmeta.cfg
+{pkgmeta_home}/base_config/pkgmeta.cfg
