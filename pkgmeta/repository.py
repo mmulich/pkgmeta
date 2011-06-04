@@ -2,18 +2,15 @@
 import os
 from collections import Mapping
 try:
-    import xcPickle as pickle
+    import cPickle as pickle
 except ImportError:
     import pickle
 
 from pkgmeta.metadata import Metadata
 from pkgmeta.releases import ReleaseSet
+from pkgmeta.exectpions import RepositoryIsNotMutable
 
 __all__ = ('Repository',)
-
-
-class RepositoryIsNotMutable(Exception):
-    """Repositories are not mutable once they have been read in."""
 
 
 class Repository(Mapping):
@@ -116,3 +113,4 @@ class Repository(Mapping):
                 if search_callable(getattr(release_set, prop)):
                     search_results.append(release_set)
         return set(search_results)
+
