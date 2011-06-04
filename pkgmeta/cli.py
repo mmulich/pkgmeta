@@ -34,7 +34,10 @@ class CommandRegistry(MutableMapping):
         if not isinstance(subparsers, argparse._SubParsersAction):
             raise TypeError("Expected an argparse._SubParsersAction object")
         for name, command_class in self.cmd_clses.items():
-            self.cmds[name] = command_class(subparsers)
+            command_help = command_class.__doc__
+            command_parser = subparsers.add_parser(name,
+                                                   help=command_help)
+            self.cmds[name] = command_class(command_parser)
 
 commands = CommandRegistry()
 
@@ -48,9 +51,8 @@ class BaseCommand:
 
     name = None
 
-    def __init__(self, subparsers):
-        self.command_parser = subparsers.add_parser(self.name,
-                                                    help=self.__doc__)
+    def __init__(self, parser):
+        self.command_parser = parser
 
     def __call__(self, namespace):
         self.cmd(namespace)
@@ -76,14 +78,12 @@ class SearchCommand(BaseCommand):
     """Search the repository for packages"""
     name = 'search'
 
-    def __init__(self, subparsers):
-        super(SearchCommand, self).__init__(subparsers)
+    def __init__(self, parser):
+        super(SearchCommand, self).__init__(parser)
         self.command_parser.add_argument('search-terms', nargs='+',
                                          help="list of of search criteria")
 
     def cmd(self, namespace):
-        
-        print(self.name)
         pass
 
 commands.add(SearchCommand)
@@ -117,7 +117,6 @@ def main():
     # Process action
     cmd = commands[args.command]
     return cmd(args)
-
 
 run = main
 
