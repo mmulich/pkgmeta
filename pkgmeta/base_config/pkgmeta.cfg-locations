@@ -1,3 +1,5 @@
-{userbase}/lib/python{py_short_version}/pkgmeta.cfg
-/etc/pkgmeta/pkgmeta.cfg
+{local}/pkgmeta.cfg
+{config}/pkgmeta.cfg
+# XXX Temporary until I can figure out the issue with resources.get_file{_path}
+#     and unittesting.
 {pkgmeta_home}/base_config/pkgmeta.cfg
