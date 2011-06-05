@@ -49,14 +49,3 @@ class TestMetadataRepository(BaseTestCase):
         cal_results = [rs.name for rs in repo.search(cal_search)]
         self.assertTrue('solarcal' in cal_results,
                         "Expected to find solarcal in the search results.")
-
-    def test_to_and_from_pickle(self):
-        # To and from a specified pickle location.
-        repo = self.makeOne(self.repo_directory)
-        pickle = repo.to_pickle(self.repo_pickle)
-        self.assertEqual(self.repo_pickle, pickle)
-        from pkgmeta.repository import Repository
-        loaded_repo = Repository.from_pickle(pickle)
-        self.assertEqual(repo, loaded_repo)
-        # To and from unspecified pickle location... use pkgmeta.cfg settings.
-        self.fail("pkgmeta.cfg isn't implemented yet")

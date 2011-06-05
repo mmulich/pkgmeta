@@ -47,27 +47,6 @@ class Repository(Mapping):
         inst.__from__ = from_init_name
         return inst
 
-    @classmethod
-    def from_pickle(cls, location=None):
-        """Initialize the repository from the given pickled repository file
-        location. If a location is not given, the predefined default set in
-        pkgmeta.cfg is used."""
-        from_init_name = 'from_pickle'
-        with open(location, 'rb') as p:
-            inst = pickle.load(p)
-        if not isinstance(inst, cls):
-            raise TypeError("Unpickled something that isn't a repository")
-        inst.path = location
-        inst.__from__ = from_init_name
-        return inst
-
-    def to_pickle(self, location=None):
-        """Pickle the repository to the given location or a predefined default
-        set in pkgmeta.cfg."""
-        with open(location, 'wb') as p:
-            pickle.dump(self, p)
-        return location
-
     def __repr__(self):
         cls_name = self.__class__.__name__
         if hasattr(self, '__from__'):
