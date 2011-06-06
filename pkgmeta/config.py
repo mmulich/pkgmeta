@@ -60,8 +60,9 @@ class PkgMetaConfig(ConfigParser):
         if cfg is None:
             cfg = PKGMETA_CFGS[0]
         self.read(cfg)
+        if not hasattr(self, 'default'):
+            self.default = self.sections()[0]
         self._file = cfg
-        self._repositories = []
 
     def read(self, filenames):
         """Reads configuration from a sequence."""
@@ -84,11 +85,6 @@ class PkgMetaConfig(ConfigParser):
             new_value = _substitute_config_vars(value)
             setattr(self, name, new_value)
         self.remove_section('global')
-        # Substitute sysconfig path variables.
-        for section in self.sections():
-            for name, value in self.items(section):
-                new_value = _substitute_config_vars(value) 
-                self.set(section, name, new_value)
 
     def list_repositories(self):
         """List available repositories."""
@@ -96,5 +92,22 @@ class PkgMetaConfig(ConfigParser):
 
     def get_repository(self, name=None):
         """Get a Repository by name. If name is not given, the default or first found
-        repository will be given."""
+        repository will be returned."""
         raise NotImplementedError
+
+    def get_repository_config(self, name=None):
+        """Get a RepositoryConfig by name. If name is not given, the default or first found
+        repository will be returned."""
+        if name is None:
+            name = self.default
+        location = os.path.join(self.root, name)
+        sources = [source for source in self.get(name, 'sources').split() if source] 
+        return RepositoryConfig(name, location, sources)
+
+
+class RepositoryConfig:
+
+    def __init__(self, name, location, sources=[]):
+        self.name = name
+        self.location = location
+        self.sources = sources
