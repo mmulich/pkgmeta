@@ -90,11 +90,6 @@ class PkgMetaConfig(ConfigParser):
         """List available repositories."""
         return self.sections()
 
-    def get_repository(self, name=None):
-        """Get a Repository by name. If name is not given, the default or first found
-        repository will be returned."""
-        raise NotImplementedError
-
     def get_repository_config(self, name=None):
         """Get a RepositoryConfig by name. If name is not given, the default or first found
         repository will be returned."""
