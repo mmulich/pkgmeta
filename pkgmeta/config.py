@@ -4,7 +4,7 @@ import sysconfig
 from configparser import ConfigParser
 from pkgmeta.exceptions import ConfigNotFound, ConfigReadError
 
-__all__ = ('Config', 'PKGMETA_CFGS', 'PKGMETA_CFG_LOCATIONS',)
+__all__ = ('PkgMetaConfig', 'PKGMETA_CFGS', 'PKGMETA_CFG_LOCATIONS',)
 
 # FIXME: Should be using packaging.resources.get_file{_path}, but these are
 #        currently not working in the tests because of missing logic in
@@ -48,7 +48,7 @@ def _retrieve_config_list(list_file):
 PKGMETA_CFGS = tuple(_retrieve_config_list(PKGMETA_CFG_LOCATIONS))
 
 
-class Config(ConfigParser):
+class PkgMetaConfig(ConfigParser):
     """Configuration parser for pkgmeta.cfg initialization.
 
     This fills in any missing repository configuration and sets a
@@ -56,7 +56,7 @@ class Config(ConfigParser):
     """
 
     def __init__(self, cfg=None):
-        super(Config, self).__init__(allow_no_value=True)
+        super(PkgMetaConfig, self).__init__(allow_no_value=True)
         if cfg is None:
             cfg = PKGMETA_CFGS[0]
         self.read(cfg)
@@ -73,7 +73,7 @@ class Config(ConfigParser):
             filename = filenames[0]
         else:
             filename = filenames
-        super(Config, self).read(filename)
+        super(PkgMetaConfig, self).read(filename)
         # Verify the global section is in tact
         if not self.has_section('global'):
             raise ConfigReadError("[global] section missing.")
@@ -91,8 +91,8 @@ class Config(ConfigParser):
                 self.set(section, name, new_value)
 
     def list_repositories(self):
-        """List available repositories by name."""
-        raise NotImplementedError
+        """List available repositories."""
+        return self.sections()
 
     def get_repository(self, name=None):
         """Get a Repository by name. If name is not given, the default or first found
