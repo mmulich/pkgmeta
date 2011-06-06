@@ -17,3 +17,6 @@ class ConfigReadError(Exception):
 class RepositoryIsNotMutable(Exception):
     """Repositories are not mutable once they have been read in."""
 
+
+class RepositoryNotFound(Exception):
+    """The repository could not be found a the specified location."""
