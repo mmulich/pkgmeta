@@ -10,9 +10,6 @@ class BaseTestCase(unittest.TestCase):
 
     def setUp(self):
         self.repo_directory = tempfile.mkdtemp('-repo', 'pkg-metadata-')
-        nil, self.repo_pickle = tempfile.mkstemp('.pickle', 'pkg-metadata-')
-        del nil
 
     def tearDown(self):
         shutil.rmtree(self.repo_directory)
-        os.remove(self.repo_pickle)
