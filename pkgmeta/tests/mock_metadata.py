@@ -4,10 +4,10 @@ ALL_DISTS = []
 # Examples are a three value tuple:
 # __1__   ({'name': "name", ...},
 # __2__    (version, ...),
-# __3__    {"version": {'description': "special description", ...},
+# __3__    {"version": {'summary': "special summary", ...},
 #          )
 #
-# 1) Common metadata properties (e.g. name, description, etc.)
+# 1) Common metadata properties (e.g. name, summary, etc.)
 # 2) Versions to create in increasing order
 # 3) An optional dictionary containing extra metadata keyed by version (e.g.
 #    requires, provides, etc.)
@@ -23,7 +23,7 @@ SOLARCAL = ({'name': 'solarcal',
 ALL_DISTS.append(SOLARCAL)
 
 SOAPBAR = ({'name': 'soapbar',
-            'description': "Optimized SOAP library.",
+            'summary': "Optimized SOAP library.",
             'author': "Rubber Ducky",
             },
            ('4.0dev', '4.0', '4.1a1', '4.1a2',
@@ -36,7 +36,7 @@ soapbubble__versions = ('4.0', '5.0', '5.1', '5.2', '5.3', '6.0', '6.1')
 soapbubble__extends = dict([(v, dict(provides_dist=['soapbar (>=%s)' % v]),)
                                 for v in soapbubble__versions])
 SOAPBUBBLE = ({'name': 'soapbubble',
-               'description': "A lightweight SOAP library in pure Python",
+               'summary': "A lightweight SOAP library in pure Python",
                'author': "Scrubbing Bubble and Rubber Ducky",
                },
               soapbubble__versions,
@@ -45,7 +45,7 @@ SOAPBUBBLE = ({'name': 'soapbubble',
 ALL_DISTS.append(SOAPBUBBLE)
 
 SANDBOX = ({'name': 'sandbox',
-            'description': "A prototyping database that has the " \
+            'summary': "A prototyping database that has the " \
                            "UniversalDB API",
             'author': "Baby Goob",
             },
@@ -55,7 +55,7 @@ ALL_DISTS.append(SANDBOX)
 
 waterweb_5_0__extends = dict(provides_dist=['earthweb (>=2.0)'])
 WATERWEB = ({'name': 'waterweb',
-             'description': "A water based web framework",
+             'summary': "A water based web framework",
              'author': "Fireman John",
              },
             ('2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0'),
@@ -72,7 +72,7 @@ WATERWEB = ({'name': 'waterweb',
 ALL_DISTS.append(WATERWEB)
 
 EARTHWEB = ({'name': 'earthweb',
-             'description': "An earth based web framework",
+             'summary': "An earth based web framework",
              'author': "Joe Dirt",
              },
             ('1.0', '2.0', '3.0'),
@@ -80,7 +80,7 @@ EARTHWEB = ({'name': 'earthweb',
 ALL_DISTS.append(EARTHWEB)
 
 FIREWEB = ({'name': 'fireweb',
-            'description': "A fire based web framework to burn all others",
+            'summary': "A fire based web framework to burn all others",
             'author': "Logi",
             'provides_dist': ['waterweb (>=7.0,<8.0)',
                               #: Wouldn't it be nice to say provides soap?
@@ -95,7 +95,7 @@ FIREWEB = ({'name': 'fireweb',
 ALL_DISTS.append(FIREWEB)
 
 BIGBOX = ({'name': 'bigbox',
-           'description': "A big box for all kinds of data",
+           'summary': "A big box for all kinds of data",
            'author': "Roogle",
            'provides_dist': ['sandbox (>=4.0,<5.0)'],
            'obsoletes_dist': ['sandbox (>=4.0,<5.0)'],
@@ -105,7 +105,7 @@ BIGBOX = ({'name': 'bigbox',
 ALL_DISTS.append(BIGBOX)
 
 WEBCAL = ({'name': 'webcal',
-           'description': "Web calendaring application",
+           'summary': "Web calendaring application",
            'author': "Hathor",
            },
           ('1.0', '2.0', '3.0',),
