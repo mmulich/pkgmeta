@@ -7,6 +7,9 @@ import sys
 import argparse
 from collections import MutableMapping
 
+from pkgmeta.config import PkgMetaConfig
+from pkgmeta.repository import Repository
+
 # FIXME: Get the default config from pkgmeta.config when available.
 DEFAULT_CONFIG = None
 
@@ -54,10 +57,11 @@ class BaseCommand:
     def __init__(self, parser):
         self.command_parser = parser
 
-    def __call__(self, namespace):
-        self.cmd(namespace)
+    def __call__(self, repo_config, namespace):
+        # In the future we may want to do things here.
+        self.cmd(repo_config, namespace)
 
-    def cmd(self, namespace):
+    def cmd(self, repo_config, namespace):
         """Command logic"""
         raise NotImplementedError
 
@@ -66,7 +70,7 @@ class UpdateCommand(BaseCommand):
     """Update the repository from the sources list"""
     name = 'update'
 
-    def cmd(self, namespace):
+    def cmd(self, repo_config, namespace):
         """Read in the source.list, download the sources and update
         the repository."""
         pass
@@ -80,11 +84,23 @@ class SearchCommand(BaseCommand):
 
     def __init__(self, parser):
         super(SearchCommand, self).__init__(parser)
-        self.command_parser.add_argument('search-terms', nargs='+',
+        self.command_parser.add_argument('search_terms', nargs='+',
                                          help="list of of search criteria")
 
-    def cmd(self, namespace):
-        pass
+    def cmd(self, repo_config, namespace):
+        repo = Repository(repo_config)
+        search_terms = namespace.search_terms
+        # FIXME: Simple search with a lack of features
+        _search = lambda s: True in [s.find(term) >= 0 for term in search_terms]
+        releases = repo.search(_search)
+        for release in releases:
+            state = 'p'  # FIXME: other states besides just package?
+            o = "{state:{fill}{align}4}{release.name:{fill}{align}17} - " \
+                "{summary:{fill}{align}56}".format(state=state, release=release,
+                                            summary=release.get('summary'),
+                                            fill=' ', align='<')
+            print(o)
+            
 
 commands.add(SearchCommand)
 
@@ -93,7 +109,7 @@ class ShowCommand(BaseCommand):
     """Show a package's metadata"""
     name = 'show'
 
-    def cmd(self, namespace):
+    def cmd(self, repo_config, namespace):
         pass
 
 commands.add(ShowCommand)
@@ -102,21 +118,29 @@ commands.add(ShowCommand)
 def main():
     """CLI main function"""
     parser = argparse.ArgumentParser(description="Tool for working with a "
-                                     "Python package repository")
+                                                 "Python package repository")
     parser.add_argument('-c', '--configuration', metavar='CONFIG', nargs=1,
                         default=DEFAULT_CONFIG,
                         help="repository configuration file location "
-                        "(default: \"%s\")." % DEFAULT_CONFIG)
+                             "(default: \"%s\")." % DEFAULT_CONFIG)
+    parser.add_argument('-r', '--repository-name', nargs=1,
+                        # Default is handled by the Config.get_repository_config method.
+                        help="a specific non-default repository name, defaults to "
+                             "the default repository")
     subparsers = parser.add_subparsers(dest="command",
                                        help="sub-commands, use --help with "
-                                       "action for more help")
+                                            "action for more help")
     commands.init_subcommands(subparsers)
 
     args = parser.parse_args()
 
     # Process action
     cmd = commands[args.command]
-    return cmd(args)
+    # Retrieve the repository configuration
+    config = PkgMetaConfig(self.configuration)
+    repo_config = config.get_repository_config(args.repository_name)
+    # Run the command
+    return cmd(repo_config, args)
 
 run = main
 
