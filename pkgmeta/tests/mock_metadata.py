@@ -26,7 +26,8 @@ SOAPBAR = ({'name': 'soapbar',
             'summary': "Optimized SOAP library.",
             'author': "Rubber Ducky",
             },
-           ('4.0dev', '4.0', '4.1a1', '4.1a2',
+           (#'4.0dev',  # This is an invalid version, uncomment later... 
+            '4.0', '4.1a1', '4.1a2',
             '5.0a1', '5.0b1', '5.0', '5.0.1', '5.1', '5.2', '5.2.1', '5.3',
             '6.0', '6.1'),
            )
