@@ -93,6 +93,7 @@ class SearchCommand(BaseCommand):
         # FIXME: Simple search with a lack of features
         _search = lambda s: True in [s.find(term) >= 0 for term in search_terms]
         releases = repo.search(_search)
+        # TODO: It'd be great if we have some kind of formatting adapter here.
         for release in releases:
             state = 'p'  # FIXME: other states besides just package?
             o = "{state:{fill}{align}4}{release.name:{fill}{align}17} - " \
@@ -137,7 +138,8 @@ def main():
     # Process action
     cmd = commands[args.command]
     # Retrieve the repository configuration
-    config = PkgMetaConfig(self.configuration)
+    config_file = len(args.configuration) > 0 and args.configuration[0] or None
+    config = PkgMetaConfig(config_file)
     repo_config = config.get_repository_config(args.repository_name)
     # Run the command
     return cmd(repo_config, args)
