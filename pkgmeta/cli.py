@@ -110,8 +110,22 @@ class ShowCommand(BaseCommand):
     """Show a package's metadata"""
     name = 'show'
 
+    def __init__(self, parser):
+        super(ShowCommand, self).__init__(parser)
+        self.command_parser.add_argument('package_name', nargs=1,
+                                         help="package to be shown")
+
     def cmd(self, repo_config, namespace):
-        pass
+        repo = Repository(repo_config)
+        package = namespace.package_name[0]
+        release_set = repo[package]
+        for property_name, value in release_set.items():
+            if isinstance(value, list):
+                value = ', '.join(value)
+            if not value:
+                continue
+            o = "{0}: {1}".format(property_name, value)
+            print(o)
 
 commands.add(ShowCommand)
 
@@ -138,8 +152,7 @@ def main():
     # Process action
     cmd = commands[args.command]
     # Retrieve the repository configuration
-    config_file = len(args.configuration) > 0 and args.configuration[0] or None
-    config = PkgMetaConfig(config_file)
+    config = PkgMetaConfig(args.configuration)
     repo_config = config.get_repository_config(args.repository_name)
     # Run the command
     return cmd(repo_config, args)

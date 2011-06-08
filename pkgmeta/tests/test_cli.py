@@ -5,7 +5,7 @@ import argparse
 from pkgmeta.tests import unittest
 from pkgmeta.tests.base import BaseTestCase
 from pkgmeta.tests.mock_metadata import ALL_DISTS, SOLARCAL
-from pkgmeta.tests.utils import populate_repo
+from pkgmeta.tests.utils import populate_repo, _make_metadata
 
 
 class SubcommandTestCase(BaseTestCase):
@@ -43,7 +43,7 @@ class SubcommandTestCase(BaseTestCase):
         return self._output_lines
 
 
-class SearchSubcommandTestCase(SubcommandTestCase):
+class SearchCommandTestCase(SubcommandTestCase):
 
     @property
     def command_class(self):
@@ -63,3 +63,27 @@ class SearchSubcommandTestCase(SubcommandTestCase):
 p   solarcal          - Calendar based on solar dates.
 p   webcal            - Web calendaring application""".split('\n')
         self.assertEqual(output, expected_output)
+
+
+class ShowCommandTestCase(SubcommandTestCase):
+
+    @property
+    def command_class(self):
+        from pkgmeta.cli import ShowCommand
+        return ShowCommand
+
+    def test_show_package(self):
+        parser, command = self._make_one()
+        args_namespace = parser.parse_args(['solarcal'])
+
+        command(self.repo_config, args_namespace)
+        
+        output = self._get_output_lines()
+        solarcal = _make_metadata(*SOLARCAL)[0]
+        expected_output = ["{0}: {1}".format(name, value)
+                           for name, value in solarcal.items()
+                           if value]
+        self.assertEqual(output, expected_output)
+
+    def test_show_package_not_found(self):
+        self.fail()
