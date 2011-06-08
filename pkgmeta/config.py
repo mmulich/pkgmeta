@@ -4,7 +4,8 @@ import sysconfig
 from configparser import ConfigParser
 from pkgmeta.exceptions import ConfigNotFound, ConfigReadError
 
-__all__ = ('PkgMetaConfig', 'PKGMETA_CFGS', 'PKGMETA_CFG_LOCATIONS',)
+__all__ = ('PkgMetaConfig', 'RepositoryConfig',
+           'PKGMETA_CFGS', 'PKGMETA_CFG_LOCATIONS',)
 
 # FIXME: Should be using packaging.resources.get_file{_path}, but these are
 #        currently not working in the tests because of missing logic in
