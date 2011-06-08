@@ -2,7 +2,8 @@
 import os
 from collections import Mapping
 
-from pkgmeta.exceptions import RepositoryIsNotMutable, RepositoryNotFound
+from pkgmeta.exceptions import (RepositoryIsNotMutable, RepositoryNotFound,
+                                ReleaseNotFound)
 from pkgmeta.config import RepositoryConfig
 from pkgmeta.metadata import Metadata
 from pkgmeta.releases import ReleaseSet
@@ -86,7 +87,10 @@ class Repository(BaseRepository, Mapping):
     # ############################### #
 
     def __getitem__(self, key):
-        return self._data[key]
+        try:
+            return self._data[key]
+        except KeyError:
+            raise ReleaseNotFound
 
     def __iter__(self):
         return self._data.__iter__()

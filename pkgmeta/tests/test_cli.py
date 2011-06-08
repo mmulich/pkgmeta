@@ -86,4 +86,9 @@ class ShowCommandTestCase(SubcommandTestCase):
         self.assertEqual(output, expected_output)
 
     def test_show_package_not_found(self):
-        self.fail()
+        parser, command = self._make_one()
+        args_namespace = parser.parse_args(['teatime'])
+
+        from pkgmeta.exceptions import ReleaseNotFound
+        with self.assertRaises(ReleaseNotFound) as err:
+            command(self.repo_config, args_namespace)

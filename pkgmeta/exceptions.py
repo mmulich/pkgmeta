@@ -20,3 +20,7 @@ class RepositoryIsNotMutable(Exception):
 
 class RepositoryNotFound(Exception):
     """The repository could not be found a the specified location."""
+
+
+class ReleaseNotFound(KeyError):
+    """A release set could not be found for the requested package."""
