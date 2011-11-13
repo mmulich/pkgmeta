@@ -17,6 +17,14 @@ class TestMetadata(unittest.TestCase):
         with self.assertRaises(InvalidVersion):
             meta.normalized_version
 
+    def test_repr(self):
+        name = 'common'
+        version = '9.9'
+        meta = self.make_one(mapping={'name': name,
+                                      'version': version})
+        repr_value = "<Metadata \"%s (%s)\">" % (name, version)
+        self.assertEqual(repr(meta), repr_value)
+
 
 class TestMetadataComparisons(unittest.TestCase):
     """Test for metadata version comparison functionality."""
