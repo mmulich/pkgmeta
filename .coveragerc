@@ -1,0 +1,4 @@
+[run]
+omit =
+    pkgmeta/_compat/*
+    pkgmeta/tests/*
