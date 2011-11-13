@@ -34,6 +34,13 @@ class PkgMetaConfigTestCase(unittest.TestCase):
         from pkgmeta.config import PkgMetaConfig
         return PkgMetaConfig(*args, **kwargs)
 
+    def test_iteration(self):
+        repo_names = ['test1-repo', 'test2-repo']
+        repos = [self.make_repo_config(n) for n in repo_names]
+        config = self.make_one(repos)
+
+        self.assertEqual(list(config), repos)
+
     def test_get_repository_config_default(self):
         repo_names = ['test1-repo', 'test2-repo']
         repos = [self.make_repo_config(n) for n in repo_names]
