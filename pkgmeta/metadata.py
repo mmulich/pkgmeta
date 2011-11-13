@@ -3,7 +3,7 @@ from packaging.errors import IrrationalVersionError
 from packaging.metadata import Metadata as BaseMetadata
 from packaging.version import suggest_normalized_version, NormalizedVersion
 
-__all__ = ('Metadata',)
+__all__ = ('Metadata', 'InvalidVersion',)
 
 
 class InvalidVersion(Exception):
@@ -24,7 +24,7 @@ class Metadata(BaseMetadata):
         version = suggest_normalized_version(self['Version'])
         if version is None:
             raise InvalidVersion("cannot determine the normalized version "
-                                 "for:  %s" % self.version)
+                                 "for:  %s" % self['Version'])
         return NormalizedVersion(version)
 
     @property

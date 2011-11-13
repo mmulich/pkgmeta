@@ -2,6 +2,22 @@
 from pkgmeta.tests import unittest
 
 
+class TestMetadata(unittest.TestCase):
+    """Test custom logic on the Metadata class."""
+
+    def make_one(self, **kwargs):
+        from pkgmeta.metadata import Metadata
+        return Metadata(**kwargs)
+
+    def test_invalid_version(self):
+        version = '2009-01rc1'
+        from pkgmeta.metadata import InvalidVersion
+        meta = self.make_one(mapping={'name': 'common',
+                                      'version': version})
+        with self.assertRaises(InvalidVersion):
+            meta.normalized_version
+
+
 class TestMetadataComparisons(unittest.TestCase):
     """Test for metadata version comparison functionality."""
 
