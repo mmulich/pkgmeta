@@ -2,6 +2,7 @@
 import os
 from collections import Mapping
 
+from pkgmeta.exceptions import ReleaseNotFound
 from pkgmeta.config import RepositoryConfig
 from pkgmeta.metadata import Metadata
 from pkgmeta.releases import ReleaseSet
@@ -28,7 +29,7 @@ class Repository(Mapping):
         try:
             return self.storage[key]
         except KeyError:
-            raise ReleaseNotFound
+            raise ReleaseNotFound(key)
 
     def __iter__(self):
         return self.storage.__iter__()
