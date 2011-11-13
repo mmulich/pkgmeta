@@ -6,3 +6,8 @@ docs/build
 # Emacs #
 #########
 *~
+
+# Coverage #
+############
+.coverage
+htmlcov
