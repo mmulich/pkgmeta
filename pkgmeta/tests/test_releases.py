@@ -16,10 +16,13 @@ class TestReleaseSet(BaseTestCase):
         super(TestReleaseSet, self).tearDown()
 
     def make_one(self):
-        from pkgmeta.releases import ReleaseSet
+        #: Easiest way to make a releaseset is from the directory info.
+        # XXX Unfortunately this pulls in other imports that I'd rather not
+        #     bother with in this test case.
+        from pkgmeta.storage import _releaseset_from_fs
         dist_name = SOAPBAR[0]['name']
         release_path = os.path.join(self.repo_directory, dist_name)
-        return ReleaseSet.from_directory(release_path)
+        return _releaseset_from_fs(release_path)
 
     def test_init_with_noniterable_single_release(self):
         from pkgmeta.metadata import Metadata
