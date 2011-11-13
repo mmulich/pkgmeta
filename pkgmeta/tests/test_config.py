@@ -5,24 +5,6 @@ import tempfile
 from pkgmeta.tests import unittest
 
 
-# TEST_PKGMETA_CFG = """\
-# [global]
-# root = {appdata.persistent}
-# cache = {appdata.disposable}
-
-# [test1-repo]
-# sources =
-#     %(source_one)s
-
-# [test2-repo]
-# sources =
-#     %(source_two)s
-#     %(source_one)s
-# """
-
-# SOURCES = {'source_one': 'file:///', 'source_two': 'file:///'}
-
-
 class PkgMetaConfigTestCase(unittest.TestCase):
 
     def make_repo_config(self, *args, **kwargs):
