@@ -37,7 +37,7 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
-
+   config
 
 Indices and tables
 ==================
