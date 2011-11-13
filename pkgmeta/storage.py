@@ -29,7 +29,7 @@ class FileSystemStorage(Mapping):
         self.config = config
         self.location = location
 
-        path = os.path.expanduser(self.location)
+        path = self.location
         # ??? What do we do when the path doesn't exist?
         if not os.path.isdir(path):
             raise RuntimeError("Expected a distribution metadata structure "
