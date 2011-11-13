@@ -2,12 +2,9 @@
 from packaging.errors import IrrationalVersionError
 from packaging.metadata import Metadata as BaseMetadata
 from packaging.version import suggest_normalized_version, NormalizedVersion
+from pkgmeta.exceptions import InvalidVersion
 
-__all__ = ('Metadata', 'InvalidVersion',)
-
-
-class InvalidVersion(Exception):
-    """An invalid version that can not be normalized by packaging."""
+__all__ = ('Metadata',)
 
 
 class Metadata(BaseMetadata):

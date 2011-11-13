@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ('ConfigNotFound', 'RepositoryIsNotMutable',)
- 
+__all__ = (
+    'InvalidVersion',
+    'RepositoryIsNotMutable', 'RepositoryNotFound',
+    'ReleaseNotFound',
+    )
 
-class ConfigNotFound(Exception):
-    """Configuration could not be found"""
 
-
-class ConfigReadError(Exception):
-    """Configuration could not be read in."""
-
-    def __init__(self, message=''):
-        self.message = message
+class InvalidVersion(Exception):
+    """An invalid version that can not be normalized by packaging."""
 
 
 class RepositoryIsNotMutable(Exception):
@@ -24,3 +21,4 @@ class RepositoryNotFound(Exception):
 
 class ReleaseNotFound(KeyError):
     """A release set could not be found for the requested package."""
+
