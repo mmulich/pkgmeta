@@ -1,5 +1,0 @@
-{local}/pkgmeta.cfg
-{config}/pkgmeta.cfg
-# XXX Temporary until I can figure out the issue with resources.get_file{_path}
-#     and unittesting.
-{pkgmeta_home}/base_config/pkgmeta.cfg
