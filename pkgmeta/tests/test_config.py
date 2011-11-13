@@ -53,6 +53,15 @@ class PkgMetaConfigTestCase(unittest.TestCase):
         self.assertTrue(isinstance(repo_config, RepositoryConfig))
         self.assertEqual(repo_config.name, repo_names[0])
 
+    def test_invalid_name_with_get_repository_config(self):
+        repo_names = ['test1-repo', 'test2-repo']
+        repos = [self.make_repo_config(n) for n in repo_names]
+        config = self.make_one(repos)
+
+        # Test with a non-existent repository name.
+        with self.assertRaises(LookupError):
+            repo_config = config.get_repository_config('bogus')
+
     def test_get_repository_config_with_name(self):
         repo_names = ['test1-repo', 'test2-repo', 'test3-repo', 'test4-repo']
         repos = [self.make_repo_config(n) for n in repo_names]
