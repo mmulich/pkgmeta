@@ -37,6 +37,10 @@ class ReleaseSet(Mapping):
     def name(self):
         return self.releases[self._stable_release].get('Name')
 
+    # ############################### #
+    #   Abstract method definitions   #
+    # ############################### #
+
     def __len__(self):
         return len(self.releases)
 

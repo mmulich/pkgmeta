@@ -20,12 +20,6 @@ class Repository(Mapping):
         self.config = config
         self.storage = self.config.storage  # For convenience
 
-    def __repr__(self):
-        cls_name = self.__class__.__name__
-        releases_repr = ', '.join([repr(x) for x in self.storage.values()])
-        representation = '<%s of %s>' % (cls_name, releases_repr)
-        return representation
-
     # ############################### #
     #   Abstract method definitions   #
     # ############################### #

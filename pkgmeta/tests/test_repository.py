@@ -45,23 +45,6 @@ class RepositoryTestCase(BaseTestCase):
         self.assertEqual(repo.config, self.config)
         self.assertIn('solarcal', repo._data)
 
-    def test_repr(self):
-        # Create the repository from a repository config
-        repo = self.target_cls(self.config)
-        self.assertEqual(repr(repo), "<Repository of 'solarcal'>")
-        # # Check representation from a repository instance created from a
-        # # directory location.
-        # repo_from_directory = self.makeOne(self.repo_directory)
-        # self.assertEqual(repr(repo_from_directory),
-        #                  'Repository.from_directory("{0}")'.format(self.repo_directory))
-
-    def test_repr(self):
-        # Check representation from a repository instance created from a
-        # directory location.
-        repo_from_directory = self.make_one(self.repo_directory)
-        self.assertEqual(repr(repo_from_directory),
-                         'Repository.from_directory("{0}")'.format(self.repo_directory))
-
     def test_get(self):
         repo = self.make_one()
         releases = repo.get('solarcal', None)
