@@ -43,7 +43,7 @@ class RepositoryTestCase(BaseTestCase):
         repo = self.target_cls(self.config)
         # Test...
         self.assertEqual(repo.config, self.config)
-        self.assertIn('solarcal', repo._data)
+        self.assertIn('solarcal', repo)
 
     def test_get(self):
         repo = self.make_one()
