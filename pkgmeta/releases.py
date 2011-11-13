@@ -12,8 +12,12 @@ class ReleaseSet(Mapping):
     Initialized by an optional list of dist-info directories.
     """
 
-    def __init__(self, iterable=[]):
-        self.releases = list(iterable)
+    def __init__(self, releases):
+        for release in releases:
+            if not isinstance(release, Metadata):
+                raise TypeError("Release values must be "
+                                "pkgmeta.metadata.Metadata objects.")
+        self.releases = list(releases)
         self._reorder()
         # FIXME: Find a better way to determine the stable release.
         self._stable_release = len(self) - 1
@@ -41,11 +45,7 @@ class ReleaseSet(Mapping):
 
     @property
     def name(self):
-        try:
-            name = self.releases[self._stable_release].get('Name')
-        except IndexError:
-            name = 'UNKNOWN'
-        return name
+        return self.releases[self._stable_release].get('Name')
 
     def __len__(self):
         return len(self.releases)
