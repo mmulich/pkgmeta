@@ -20,10 +20,6 @@ class Repository(Mapping):
         self.config = config
         self.storage = self.config.storage  # For convenience
 
-        #: Initialize the data in a dictionary of package names (keys)
-        #  with a list of versions (values).
-        self.distributions = self.storage.keys()
-
     def __repr__(self):
         cls_name = self.__class__.__name__
         releases_repr = ', '.join([repr(x) for x in self.storage.values()])

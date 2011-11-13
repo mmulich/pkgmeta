@@ -27,16 +27,6 @@ class ReleaseSet(Mapping):
         """
         self.releases.sort()
 
-    @classmethod
-    def from_directory(cls, path):
-        """Initialize the set from a filesystem path."""
-        releases = []
-        for release in os.listdir(path):
-            metadata_file = os.path.join(path, release, 'METADATA')
-            metadata = Metadata(path=metadata_file)
-            releases.append(metadata)
-        return cls(releases)
-
     def __hash__(self):
         release_hash = 0
         for release in self.releases:
