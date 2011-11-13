@@ -19,10 +19,6 @@ class PkgMetaConfig(object):
         if default is None:
             self.default = repositories[0].name
 
-    def list_repositories(self):
-        """List available repositories."""
-        return iter(self.repositories)
-
     def get_repository_config(self, name=None):
         """Get a RepositoryConfig by name. If name is not given,
         the default repository will be returned."""
