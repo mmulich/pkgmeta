@@ -66,3 +66,15 @@ class PkgMetaConfigTestCase(unittest.TestCase):
         repo_name = repo_names[-1]
         repo_config = config.get_repository_config(repo_name)
         self.assertEqual(repo_config.name, repo_name)
+
+
+class TestRepositoryConfig(unittest.TestCase):
+
+    def test_storage_init(self):
+        self.fail()
+
+    def test_unknown_storage_type(self):
+        from pkgmeta.exceptions import UnknownRepositoryStorageType
+        from pkgmeta.config import RepositoryConfig
+        with self.assertRaises(UnknownRepositoryStorageType):
+            config = RepositoryConfig('name', type='DB2')

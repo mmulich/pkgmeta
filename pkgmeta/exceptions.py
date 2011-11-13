@@ -22,3 +22,6 @@ class RepositoryNotFound(Exception):
 class ReleaseNotFound(KeyError):
     """A release set could not be found for the requested package."""
 
+
+class UnknownRepositoryStorageType(Exception):
+    """Raised when an unknown storage type is requested."""

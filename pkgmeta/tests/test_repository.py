@@ -6,52 +6,54 @@ from pkgmeta.tests.mock_metadata import ALL_DISTS, SOLARCAL
 from pkgmeta.tests.utils import populate_repo
 
 
-class BaseRepositoryTestCase(BaseTestCase):
+class RepositoryTestCase(BaseTestCase):
     """Metadata directory storage structure test.
     This will be the foundation for example data to be used throughout the
     test environment."""
 
     def setUp(self):
-        super(BaseRepositoryTestCase, self).setUp()
-        from pkgmeta.config import FileSystemRepositoryConfig
+        super(RepositoryTestCase, self).setUp()
+        from pkgmeta.config import RepositoryConfig
+        from pkgmeta.storage import FS_STORAGE_TYPE
         # Populate the repository with a single distribution
         populate_repo([SOLARCAL], self.repo_directory)
         # Create the repository from a repository config
-        self.config = FileSystemRepositoryConfig('test', self.repo_directory)
+        self.config = RepositoryConfig('test', type=FS_STORAGE_TYPE,
+                                       location=self.repo_directory)
+
+    @property
+    def target_cls(self):
+        from pkgmeta.repository import Repository
+        return Repository
+
+    def make_one(self, location=None):
+        if location is None:
+            location = self.repo_directory
+        from pkgmeta.config import RepositoryConfig
+        from pkgmeta.storage import FS_STORAGE_TYPE
+        config = RepositoryConfig('', type=FS_STORAGE_TYPE, location=location)
+        return self.target_cls(config)
+
+    def test_init_without_config(self):
+        with self.assertRaises(TypeError):
+            self.target_cls(None)
 
     def test_init(self):
-        from pkgmeta.repository import BaseRepository
         # Create the repository from a repository config
-        repo = BaseRepository(self.config)
+        repo = self.target_cls(self.config)
         # Test...
         self.assertEqual(repo.config, self.config)
         self.assertIn('solarcal', repo._data)
 
     def test_repr(self):
-        from pkgmeta.repository import BaseRepository
         # Create the repository from a repository config
-        repo = BaseRepository(self.config)
-        self.assertEqual(repr(repo), "<BaseRepository of 'solarcal'>")
+        repo = self.target_cls(self.config)
+        self.assertEqual(repr(repo), "<Repository of 'solarcal'>")
         # # Check representation from a repository instance created from a
         # # directory location.
         # repo_from_directory = self.makeOne(self.repo_directory)
         # self.assertEqual(repr(repo_from_directory),
         #                  'Repository.from_directory("{0}")'.format(self.repo_directory))
-
-
-class RepositoryTestCase(BaseTestCase):
-
-    def setUp(self):
-        super(RepositoryTestCase, self).setUp()
-        populate_repo(ALL_DISTS, self.repo_directory)
-
-    def make_one(self, location=None):
-        from pkgmeta.repository import Repository
-        if location is None:
-            location = self.repo_directory
-        from pkgmeta.config import FileSystemRepositoryConfig
-        config = FileSystemRepositoryConfig('', location)
-        return Repository.from_directory(config)
 
     def test_repr(self):
         # Check representation from a repository instance created from a

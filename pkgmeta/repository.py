@@ -2,53 +2,57 @@
 import os
 from collections import Mapping
 
-from pkgmeta.exceptions import (RepositoryIsNotMutable, RepositoryNotFound,
-                                ReleaseNotFound)
-from pkgmeta.config import RepositoryConfig, FileSystemRepositoryConfig
+from pkgmeta.config import RepositoryConfig
 from pkgmeta.metadata import Metadata
 from pkgmeta.releases import ReleaseSet
 
 __all__ = ('Repository',)
 
 
-class BaseRepository:
+class Repository(Mapping):
+    """A repository of Python distribution metadata. The structure is
+    organized by package name then by release (version)."""
 
     def __init__(self, config):
         if not isinstance(config, RepositoryConfig):
-            raise TypeError("Expected a RepositoryConfig object.")
+            raise TypeError("Expected a "
+                            "pkgmeta.config.RepositoryConfig object.")
         self.config = config
-        path = self.config.location
+        self.storage = self.config.storage  # For convenience
 
-        if not os.path.exists(path):
-            raise RepositoryNotFound("Can't find the repository location at "
-                                     "{0}".format(location))
-        elif not os.path.isdir(path):
-            raise Exception("Expected a distribution metadata structure at "
-                            "%s, but found a file instead." % self.location)
-
-        structure = os.walk(path)
-        root, dist_dirs = next(structure)[:2]
         #: Initialize the data in a dictionary of package names (keys)
         #  with a list of versions (values).
-        data = {dist:ReleaseSet.from_directory(os.path.join(root, dist))
-                for dist in dist_dirs}
-        self._data = data
+        self.distributions = self.storage.keys()
 
     def __repr__(self):
         cls_name = self.__class__.__name__
-        if hasattr(self, '__from__'):
-            init_parts = [cls_name, self.__from__]
-            init_parts.append(self.config.location)
-            representation = "{0}.{1}(\"{2}\")".format(*init_parts)
-        else:
-            cls_init = cls_name
-            releases_repr = ', '.join([repr(x) for x in self._data])
-            representation = '<%s of %s>' % (cls_name, releases_repr)
+        releases_repr = ', '.join([repr(x) for x in self.storage.values()])
+        representation = '<%s of %s>' % (cls_name, releases_repr)
         return representation
+
+    # ############################### #
+    #   Abstract method definitions   #
+    # ############################### #
+
+    def __getitem__(self, key):
+        try:
+            return self.storage[key]
+        except KeyError:
+            raise ReleaseNotFound
+
+    def __iter__(self):
+        return self.storage.__iter__()
+
+    def __len__(self):
+        return len(self.storage)
 
     # ############## #
     #   Public API   #
     # ############## #
+
+    @property
+    def distributions(self):
+        return self.storage.keys()
 
     def search(self, search_callable, property_names=['name']):
         if not hasattr(search_callable, '__call__'):
@@ -61,38 +65,7 @@ class BaseRepository:
         for prop in property_names:
             ##search_results.extend([rs for rs in self._data
             ##                       if search_callable(getattr(rs, prop))])
-            for release_set in self._data.values():
+            for release_set in self.storage.values():
                 if search_callable(getattr(release_set, prop)):
                     search_results.append(release_set)
         return set(search_results)
-
-
-class Repository(BaseRepository, Mapping):
-    """A repository of Python distribution metadata. The structure is
-    organized by package name then by release (version)."""
-
-    @classmethod
-    def from_directory(cls, config):
-        """Initialize the data from a filesystem directory structure."""
-        if not isinstance(config, FileSystemRepositoryConfig):
-            raise TypeError("Expected a FileSystemRepositoryConfig object, "
-                            "recieved a {0!r} instead.".format(config))
-        inst = cls(config)
-        setattr(inst, '__from__', 'from_directory')
-        return inst
-
-    # ############################### #
-    #   Abstract method definitions   #
-    # ############################### #
-
-    def __getitem__(self, key):
-        try:
-            return self._data[key]
-        except KeyError:
-            raise ReleaseNotFound
-
-    def __iter__(self):
-        return self._data.__iter__()
-
-    def __len__(self):
-        return len(self._data)
