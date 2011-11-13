@@ -34,6 +34,17 @@ class PkgMetaConfigTestCase(unittest.TestCase):
         from pkgmeta.config import PkgMetaConfig
         return PkgMetaConfig(*args, **kwargs)
 
+    def test_init_without_iterable_repository_value(self):
+        repo_name = 'test1-repo'
+        repos = self.make_repo_config(repo_name)
+        config = self.make_one(repos)
+
+        self.assertEqual(config.repositories[0].name, repo_name)
+
+    def test_init_with_non_RepositoryConfig_value(self):
+        with self.assertRaises(TypeError):
+            self.make_one([self.make_repo_config('bingo'), 'just-a-name'])
+
     def test_iteration(self):
         repo_names = ['test1-repo', 'test2-repo']
         repos = [self.make_repo_config(n) for n in repo_names]
