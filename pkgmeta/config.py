@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ('PkgMetaConfig', 'RepositoryConfig',)
+__all__ = ('PkgMetaConfig',
+           'RepositoryConfig', 'FileSystemRepositoryConfig',
+           )
 
 
 class PkgMetaConfig(object):

@@ -49,7 +49,9 @@ class RepositoryTestCase(BaseTestCase):
         from pkgmeta.repository import Repository
         if location is None:
             location = self.repo_directory
-        return Repository.from_directory(location)
+        from pkgmeta.config import FileSystemRepositoryConfig
+        config = FileSystemRepositoryConfig('', location)
+        return Repository.from_directory(config)
 
     def test_repr(self):
         # Check representation from a repository instance created from a

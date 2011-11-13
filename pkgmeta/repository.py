@@ -4,7 +4,7 @@ from collections import Mapping
 
 from pkgmeta.exceptions import (RepositoryIsNotMutable, RepositoryNotFound,
                                 ReleaseNotFound)
-from pkgmeta.config import RepositoryConfig
+from pkgmeta.config import RepositoryConfig, FileSystemRepositoryConfig
 from pkgmeta.metadata import Metadata
 from pkgmeta.releases import ReleaseSet
 
@@ -72,14 +72,13 @@ class Repository(BaseRepository, Mapping):
     organized by package name then by release (version)."""
 
     @classmethod
-    def from_directory(cls, path):
+    def from_directory(cls, config):
         """Initialize the data from a filesystem directory structure."""
-        from_init_name = 'from_directory'
-        path = os.path.abspath(path)
-        name = os.path.dirname(path)
-        config = RepositoryConfig(name, path)
+        if not isinstance(config, FileSystemRepositoryConfig):
+            raise TypeError("Expected a FileSystemRepositoryConfig object, "
+                            "recieved a {0!r} instead.".format(config))
         inst = cls(config)
-        setattr(inst, '__from__', from_init_name)
+        setattr(inst, '__from__', 'from_directory')
         return inst
 
     # ############################### #
