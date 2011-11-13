@@ -43,3 +43,17 @@ class TestMetadataComparisons(unittest.TestCase):
         #: Change the name to ensure that differnt dist
         #  with the same version aren't equal.
         self.assertGreaterEqual(meta_one, meta_two)
+
+    def test_lessthan_for_incompatible_types_comparison(self):
+        random_object = object()
+        meta_one = self.make_one(mapping={'name': 'common',
+                                          'version': '1.0.1'})
+        with self.assertRaises(TypeError):
+            comparision = meta_one < random_object
+
+    def test_equal_for_incompatible_types_comparison(self):
+        random_object = object()
+        meta_one = self.make_one(mapping={'name': 'common',
+                                          'version': '1.0.1'})
+        with self.assertRaises(TypeError):
+            comparision = meta_one == random_object
