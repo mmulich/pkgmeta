@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-import os
-import sysconfig
 
 __all__ = ('PkgMetaConfig', 'RepositoryConfig',)
-
-# FIXME: Should be using packaging.resources.get_file{_path}, but these are
-#        currently not working in the tests because of missing logic in
-#        packaging.command.test.
 
 
 class PkgMetaConfig(object):
@@ -47,3 +41,11 @@ class RepositoryConfig:
         self.sources = sources
         if self.sources is None:
             self.sources = []
+
+
+class FileSystemRepositoryConfig(RepositoryConfig):
+    """A file system based repository configuration"""
+
+    def __init__(self, name, location, sources=None):
+        super(FileSystemRepositoryConfig, self).__init__(name, sources)
+        self.location = location

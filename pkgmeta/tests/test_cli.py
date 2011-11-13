@@ -17,10 +17,10 @@ class SubcommandTestCase(BaseTestCase):
         self.stdout = io.StringIO()
         sys.stdout = self.stdout
         # Repository configuration
-        from pkgmeta.config import RepositoryConfig
+        from pkgmeta.config import FileSystemRepositoryConfig
         name = 'test'
         location = self.repo_directory
-        self.repo_config = RepositoryConfig(name, location)
+        self.repo_config = FileSystemRepositoryConfig(name, location)
         # Populate repository
         populate_repo(ALL_DISTS, self.repo_directory)
 

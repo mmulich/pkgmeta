@@ -13,11 +13,11 @@ class BaseRepositoryTestCase(BaseTestCase):
 
     def setUp(self):
         super(BaseRepositoryTestCase, self).setUp()
-        from pkgmeta.config import RepositoryConfig
+        from pkgmeta.config import FileSystemRepositoryConfig
         # Populate the repository with a single distribution
         populate_repo([SOLARCAL], self.repo_directory)
         # Create the repository from a repository config
-        self.config = RepositoryConfig('test', self.repo_directory)
+        self.config = FileSystemRepositoryConfig('test', self.repo_directory)
 
     def test_init(self):
         from pkgmeta.repository import BaseRepository
