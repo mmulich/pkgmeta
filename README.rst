@@ -4,7 +4,10 @@ pkgmeta
 
 Python Package Metadata Library
 
-See also https://github.com/pumazi/pkgmeta/wiki
+See also:
+
+- https://github.com/pumazi/pkgmeta/wiki
+- the docs directory of this package (sphinx-based documentation)
 
 Installation
 ------------
