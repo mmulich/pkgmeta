@@ -6,6 +6,41 @@ from pkgmeta.tests.mock_metadata import SOAPBAR, SOLARCAL
 from pkgmeta.tests.utils import make_metadata, populate_repo
 
 
+class BaseStorageTestCase(unittest.TestCase):
+    """Test the Abstract Base Class (ABC) implemenation is correct.
+    It doesn't matter what is put in the storage as long as it acts
+    like a mapping."""
+
+    @property
+    def target_cls(self):
+        from pkgmeta.storage import BaseStorage
+        return BaseStorage
+
+    def test_set_get_and_del(self):
+        storage = self.target_cls(None)
+        storage['key'] = 'value'
+        self.assertEqual(storage['key'], 'value')
+        del storage['key']
+        with self.assertRaises(KeyError):
+            value = storage['key']
+
+    def test_len(self):
+        storage = self.target_cls(None)
+        storage['one'] = 1
+        storage['two'] = 2
+        self.assertEqual(len(storage), 2)
+
+    def test_iteration(self):
+        storage = self.target_cls(None)
+        keys = ['one', 'two', 'three']
+        for value, key in enumerate(keys):
+            storage[key] = value
+        keys.sort()
+        iter_keys = [x for x in storage]
+        iter_keys.sort()
+        self.assertEqual(iter_keys, keys)
+
+
 class RuntimeStorageTestCase(unittest.TestCase):
     """Test the RuntimeStorage class"""
 

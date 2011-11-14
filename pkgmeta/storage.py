@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from collections import Mapping
+from collections import MutableMapping
 from pkgmeta.exceptions import UnknownRepositoryStorageType
 from pkgmeta.metadata import Metadata
 from pkgmeta.releases import ReleaseSet
@@ -24,12 +24,14 @@ def _releaseset_from_fs(path):
     return ReleaseSet(releases)
 
 
-class BaseStorage(Mapping):
+class BaseStorage(MutableMapping):
     """Base storage implementation"""
     _data = None
+    config = None
 
     def __init__(self, config):
         self.config = config
+        self._data = {}
 
     # ############################### #
     #   Abstract method definitions   #
@@ -37,6 +39,12 @@ class BaseStorage(Mapping):
 
     def __getitem__(self, key):
         return self._data[key]
+
+    def __setitem__(self, key, value):
+        self._data[key] = value
+
+    def __delitem__(self, key):
+        del self._data[key]
 
     def __iter__(self):
         return iter(self._data)
