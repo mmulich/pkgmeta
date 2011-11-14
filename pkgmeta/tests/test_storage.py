@@ -24,3 +24,14 @@ class RuntimeStorageTestCase(unittest.TestCase):
         expected_values = [r.name for r in releases]
         expected_values.sort()
         self.assertEqual(values, expected_values)
+
+
+class FileSystemStorageTestCase(unittest.TestCase):
+    """Test the FileSystem class"""
+
+    def test_nonexistent_path_error(self):
+        from pkgmeta.storage import FileSystemStorage
+        path = "some/directory/you/should/not/have"
+        location = os.path.join(os.curdir, path)
+        with self.assertRaises(RuntimeError):
+            storage = FileSystemStorage(None, location)
