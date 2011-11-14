@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from pkgmeta.storage import lookup_storage_by_type
-from pkgmeta.storage import FS_STORAGE_TYPE
 __all__ = ('PkgMetaConfig',
            'RepositoryConfig', 'FileSystemRepositoryConfig',
            )
@@ -38,7 +37,7 @@ class PkgMetaConfig(object):
 class RepositoryConfig:
     """A repository configuration"""
 
-    def __init__(self, name, type=FS_STORAGE_TYPE, sources=None,
+    def __init__(self, name, type=None, sources=None,
                  **kwargs):
         self.name = name
         self.type = type

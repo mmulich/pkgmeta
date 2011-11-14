@@ -5,6 +5,8 @@ from pkgmeta.exceptions import UnknownRepositoryStorageType
 from pkgmeta.releases import ReleaseSet
 from pkgmeta.metadata import Metadata
 
+STORAGE_TYPES = []
+
 def lookup_storage_by_type(type):
     types = dict(STORAGE_TYPES)
     try:
@@ -22,24 +24,12 @@ def _releaseset_from_fs(path):
     return ReleaseSet(releases)
 
 
-class FileSystemStorage(Mapping):
-    """Storage on the filesystem."""
+class BaseStorage(Mapping):
+    """Base storage implementation"""
+    _data = None
 
-    def __init__(self, config, location=None):
+    def __init__(self, config):
         self.config = config
-        self.location = location
-
-        path = self.location
-        # ??? What do we do when the path doesn't exist?
-        if not os.path.isdir(path):
-            raise RuntimeError("Expected a distribution metadata structure "
-                               "at %s, but found a file instead." % \
-                               self.location)
-        structure = os.walk(path)
-        root, dist_dirs = next(structure)[:2]
-        self._root = root
-        self._data = {dist:_releaseset_from_fs(os.path.join(root, dist))
-                      for dist in dist_dirs}
 
     # ############################### #
     #   Abstract method definitions   #
@@ -55,8 +45,39 @@ class FileSystemStorage(Mapping):
         return len(self._data)
 
 
-FS_STORAGE_TYPE = 'fs'
+class RuntimeStorage(BaseStorage):
+    """A simple storage used for the current runtime and then disposed of."""
 
-STORAGE_TYPES = [
-    (FS_STORAGE_TYPE, FileSystemStorage,),
-    ]
+    def __init__(self, config, releases=None):
+        super(RuntimeStorage, self).__init__(config)
+        if releases is None:
+            self._data = {}
+        else:
+            self._data = {rel.name:rel for rel in releases}
+
+RUNTIME_STORAGE_TYPE = 'runtime'
+STORAGE_TYPES.append((None, RuntimeStorage,))  # Default
+STORAGE_TYPES.append((RUNTIME_STORAGE_TYPE, RuntimeStorage,))
+
+
+class FileSystemStorage(BaseStorage):
+    """Storage on the filesystem."""
+
+    def __init__(self, config, location):
+        super(FileSystemStorage, self).__init__(config)
+        self.location = location
+
+        path = self.location
+        # ??? What do we do when the path doesn't exist?
+        if not os.path.isdir(path):
+            raise RuntimeError("Expected a distribution metadata structure "
+                               "at %s, but found a file instead." % \
+                               self.location)
+        structure = os.walk(path)
+        root, dist_dirs = next(structure)[:2]
+        self._root = root
+        self._data = {dist:_releaseset_from_fs(os.path.join(root, dist))
+                      for dist in dist_dirs}
+
+FS_STORAGE_TYPE = 'filesystem'
+STORAGE_TYPES.append((FS_STORAGE_TYPE, FileSystemStorage,))
