@@ -67,3 +67,7 @@ class RepositoryTestCase(BaseTestCase):
         expected_values = [dist[0]['name'] for dist in ALL_DISTS]
         expected_values.sort()
         self.assertEqual(values, expected_values)
+
+    def test_len(self):
+        repo = self.make_one()
+        self.assertEqual(len(repo), len(ALL_DISTS))
