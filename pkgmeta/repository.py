@@ -41,10 +41,6 @@ class Repository(Mapping):
     #   Public API   #
     # ############## #
 
-    @property
-    def distributions(self):
-        return self.storage.keys()
-
     def search(self, search_callable, property_names=['name']):
         if not hasattr(search_callable, '__call__'):
             # Must be a callable that returns a boolean
