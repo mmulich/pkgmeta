@@ -70,11 +70,17 @@ class PkgMetaConfigTestCase(unittest.TestCase):
 
 class TestRepositoryConfig(unittest.TestCase):
 
-    def test_storage_init(self):
-        self.fail()
+    def make_one(self, *args, **kwargs):
+        from pkgmeta.config import RepositoryConfig
+        return RepositoryConfig(*args, **kwargs)
 
     def test_unknown_storage_type(self):
         from pkgmeta.exceptions import UnknownRepositoryStorageType
-        from pkgmeta.config import RepositoryConfig
         with self.assertRaises(UnknownRepositoryStorageType):
-            config = RepositoryConfig('name', type='DB2')
+            config = self.make_one('name', type='DB2')
+
+    def test_storage_init(self):
+        config = self.make_one('repo')
+        from pkgmeta.storage import RuntimeStorage
+        #: Should default to a RuntimeStorage
+        self.assertTrue(isinstance(config.storage, RuntimeStorage))
