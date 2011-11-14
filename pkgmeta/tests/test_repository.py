@@ -60,6 +60,13 @@ class RepositoryTestCase(BaseTestCase):
         self.assertTrue('solarcal' in cal_results,
                         "Expected to find solarcal in the search results.")
 
+    def test_search_with_single_property(self):
+        repo = self.make_one()
+        cal_search = lambda s: s.find('cal') >= 0
+        cal_results = [rs.name for rs in repo.search(cal_search, 'name')]
+        self.assertTrue('solarcal' in cal_results,
+                        "Expected to find solarcal in the search results.")        
+
     def test_iteration(self):
         repo = self.make_one()
         values = [name for name in repo]

@@ -45,7 +45,8 @@ class Repository(Mapping):
         if not hasattr(search_callable, '__call__'):
             # Must be a callable that returns a boolean
             raise TypeError()
-        if not hasattr(property_names, '__iter__'):
+        if not (isinstance(property_names, list) \
+                or isinstance(property_names, tuple)):
             # Must be a sequence
             property_names = [property_names]
         search_results = []
