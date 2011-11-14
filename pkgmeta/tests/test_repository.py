@@ -16,7 +16,7 @@ class RepositoryTestCase(BaseTestCase):
         from pkgmeta.config import RepositoryConfig
         from pkgmeta.storage import FS_STORAGE_TYPE
         # Populate the repository with a single distribution
-        populate_repo([SOLARCAL], self.repo_directory)
+        populate_repo(ALL_DISTS, self.repo_directory)
         # Create the repository from a repository config
         self.config = RepositoryConfig('test', type=FS_STORAGE_TYPE,
                                        location=self.repo_directory)
@@ -59,3 +59,11 @@ class RepositoryTestCase(BaseTestCase):
         cal_results = [rs.name for rs in repo.search(cal_search)]
         self.assertTrue('solarcal' in cal_results,
                         "Expected to find solarcal in the search results.")
+
+    def test_iteration(self):
+        repo = self.make_one()
+        values = [name for name in repo]
+        values.sort()
+        expected_values = [dist[0]['name'] for dist in ALL_DISTS]
+        expected_values.sort()
+        self.assertEqual(values, expected_values)
