@@ -2,8 +2,8 @@
 import os
 from collections import Mapping
 from pkgmeta.exceptions import UnknownRepositoryStorageType
-from pkgmeta.releases import ReleaseSet
 from pkgmeta.metadata import Metadata
+from pkgmeta.releases import ReleaseSet
 
 STORAGE_TYPES = []
 

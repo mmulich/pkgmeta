@@ -3,24 +3,29 @@ import os
 from tempfile import mkdtemp
 from packaging.metadata import Metadata
 
+__all__ = (
+    'METADATA_FILENAME',
+    'make_metadata', 'populate_repo',
+    )
+
 METADATA_FILENAME = 'METADATA'
 
 
-def _make_metadata(common, versions, extended={}):
+def make_metadata(common, versions, extended={}, cls=Metadata):
     mapping = common.copy()
     items = []
     for version in versions:
         mapping['version'] = version
         if version in extended:
             mapping.update(extended[version])
-        items.append(Metadata(mapping=mapping))
+        items.append(cls(mapping=mapping))
     return items
 
 
 def populate_repo(inhabitants, root=None):
     converted_inhabitants = []
     for i in inhabitants:
-        converted_inhabitants.extend(_make_metadata(*i))
+        converted_inhabitants.extend(make_metadata(*i))
     if root is None:
         root = mkdtemp()
     for metadata in converted_inhabitants:
