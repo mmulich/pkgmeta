@@ -21,10 +21,10 @@ class SubcommandTestCase(BaseTestCase):
         from pkgmeta.storage import FS_STORAGE_TYPE
         name = 'test'
         location = self.repo_directory
-        self.repo_config = RepositoryConfig(name, type=FS_STORAGE_TYPE,
-                                            location=location)
         # Populate repository
         populate_repo(ALL_DISTS, self.repo_directory)
+        self.repo_config = RepositoryConfig(name, type=FS_STORAGE_TYPE,
+                                            location=location)
 
     def _make_one(self):
         parser = argparse.ArgumentParser(self.command_class.__doc__)
