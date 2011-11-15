@@ -71,9 +71,9 @@ STORAGE_TYPES.append((RUNTIME_STORAGE_TYPE, RuntimeStorage,))
 class FileSystemStorage(BaseStorage):
     """Storage on the filesystem."""
 
-    def __init__(self, config, location):
+    def __init__(self, config):
         super(FileSystemStorage, self).__init__(config)
-        self.location = location
+        self.location = config.location
 
         path = self.location
         # ??? What do we do when the path doesn't exist?

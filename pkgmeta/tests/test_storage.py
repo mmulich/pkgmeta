@@ -65,8 +65,10 @@ class FileSystemStorageTestCase(unittest.TestCase):
     """Test the FileSystem class"""
 
     def test_nonexistent_path_error(self):
+        from pkgmeta.config import RepositoryConfig
         from pkgmeta.storage import FileSystemStorage
         path = "some/directory/you/should/not/have"
         location = os.path.join(os.curdir, path)
+        config = RepositoryConfig('repo', location=location)
         with self.assertRaises(RuntimeError):
-            storage = FileSystemStorage(None, location)
+            storage = FileSystemStorage(config)

@@ -84,3 +84,8 @@ class TestRepositoryConfig(unittest.TestCase):
         from pkgmeta.storage import RuntimeStorage
         #: Should default to a RuntimeStorage
         self.assertTrue(isinstance(config.storage, RuntimeStorage))
+
+    def test_arbitrary_attributes(self):
+        config = self.make_one('repo', foo='foo', bar='foobar')
+        self.assertEqual(config.foo, 'foo')
+        self.assertEqual(config.bar, 'foobar')

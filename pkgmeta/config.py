@@ -44,5 +44,7 @@ class RepositoryConfig:
         self.sources = sources
         if self.sources is None:
             self.sources = []
+        for name, value in kwargs.items():
+            setattr(self, name, value)
         storage_factory = lookup_storage_by_type(self.type)
-        self.storage = storage_factory(self, **kwargs)
+        self.storage = storage_factory(self)
