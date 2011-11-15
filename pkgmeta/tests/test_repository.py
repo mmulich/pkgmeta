@@ -3,7 +3,7 @@ import os
 from pkgmeta.tests import unittest
 from pkgmeta.tests.base import BaseTestCase
 from pkgmeta.tests.mock_metadata import ALL_DISTS, SOLARCAL
-from pkgmeta.tests.utils import populate_repo
+from pkgmeta.tests.utils import make_metadata, populate_repo
 
 
 class RepositoryTestCase(BaseTestCase):
@@ -31,7 +31,8 @@ class RepositoryTestCase(BaseTestCase):
             location = self.repo_directory
         from pkgmeta.config import RepositoryConfig
         from pkgmeta.storage import FS_STORAGE_TYPE
-        config = RepositoryConfig('', type=FS_STORAGE_TYPE, location=location)
+        config = RepositoryConfig('repo', type=FS_STORAGE_TYPE,
+                                  location=location)
         return self.target_cls(config)
 
     def test_init_without_config(self):
@@ -78,3 +79,44 @@ class RepositoryTestCase(BaseTestCase):
     def test_len(self):
         repo = self.make_one()
         self.assertEqual(len(repo), len(ALL_DISTS))
+
+
+class RepositoryMutationTestCase(unittest.TestCase):
+    """Test for the mutation of a repository. Specifically checking for
+    addition and deletion."""
+
+    @property
+    def target_cls(self):
+        from pkgmeta.repository import Repository
+        return Repository
+
+    def make_releaseset(self, common, versions, extras={}):
+        from pkgmeta.metadata import Metadata
+        from pkgmeta.releases import ReleaseSet
+        return ReleaseSet(make_metadata(common, versions, extras, cls=Metadata))
+
+    def make_one(self):
+        from pkgmeta.config import RepositoryConfig
+        from pkgmeta.storage import RUNTIME_STORAGE_TYPE
+        config = RepositoryConfig('repo')
+        return self.target_cls(config)
+
+    def test_setting_releaseset(self):
+        repo = self.make_one()
+        #: Make sure the repo is empty to start
+        self.assertEqual(len(repo), 0)
+        #: Set a releaseset
+        release = self.make_releaseset(*SOLARCAL)
+        repo[release.name] = release
+        self.assertEqual(len(repo), 1)
+        self.assertIn(SOLARCAL[0]['name'], repo)
+
+    def test_setting_with_invalid_type(self):
+        repo = self.make_one()
+        #: Make sure the repo is empty to start
+        self.assertEqual(len(repo), 0)
+        #: Set a releaseset
+        release = self.make_releaseset(*SOLARCAL)
+        repo[release.name] = release
+        self.assertEqual(len(repo), 1)
+        self.assertIn(SOLARCAL[0]['name'], repo)

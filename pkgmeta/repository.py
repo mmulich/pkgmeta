@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from collections import Mapping
+from collections import MutableMapping
 
 from pkgmeta.exceptions import ReleaseNotFound
 from pkgmeta.config import RepositoryConfig
@@ -10,14 +10,14 @@ from pkgmeta.releases import ReleaseSet
 __all__ = ('Repository',)
 
 
-class Repository(Mapping):
+class Repository(MutableMapping):
     """A repository of Python distribution metadata. The structure is
     organized by package name then by release (version)."""
 
     def __init__(self, config):
         if not isinstance(config, RepositoryConfig):
             raise TypeError("Expected a "
-                            "pkgmeta.config.RepositoryConfig object.")
+                            ", pkgmeta.config.RepositoryConfig object.")
         self.config = config
         self.storage = self.config.storage  # For convenience
 
@@ -36,6 +36,16 @@ class Repository(Mapping):
 
     def __len__(self):
         return len(self.storage)
+
+    def __setitem__(self, key, value):
+        if not isinstance(value, ReleaseSet):
+            raise TypeError("Expected a pkgmeta.releases.ReleaseSet, "
+                            "received '%s'" % type(value))
+        self.storage[key] = value
+
+    def __delitem__(self, key):
+        raise Exception("Can't remove items from a read-only repository")
+        
 
     # ############## #
     #   Public API   #
