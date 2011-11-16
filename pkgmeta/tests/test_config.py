@@ -4,6 +4,19 @@ import sysconfig
 import tempfile
 from pkgmeta.tests import unittest
 
+TEST_PKGMETA_CFG = """\
+[pkgmeta]
+default = repo2
+
+[repo1]
+
+[repo2]
+
+[repo3]
+type = filesystem
+location = %(location)s
+"""
+
 
 class PkgMetaConfigTestCase(unittest.TestCase):
 
@@ -89,3 +102,50 @@ class TestRepositoryConfig(unittest.TestCase):
         config = self.make_one('repo', foo='foo', bar='foobar')
         self.assertEqual(config.foo, 'foo')
         self.assertEqual(config.bar, 'foobar')
+
+
+class ConfigurationFromAFileTest(unittest.TestCase):
+    """Read in the configuration from a pkgmeta.cfg file."""
+
+    def write_config(self, content):
+        dummy, file = tempfile.mkstemp()
+        with open(file, 'w') as f:
+            f.write(content)
+        return file
+
+    def make_one(self, file):
+        from pkgmeta.config import PkgMetaConfig
+        return PkgMetaConfig.from_file(file)
+
+    def test_blank_file(self):
+        from pkgmeta.exceptions import PkgMetaConfigFileError
+        file = self.write_config('\n')
+        with self.assertRaises(PkgMetaConfigFileError) as error:
+            self.make_one(file)
+        self.assertEqual(str(error.exception),
+                         "Missing a repository definition")
+
+    def test_invalid_default_value(self):
+        from pkgmeta.exceptions import PkgMetaConfigFileError
+        content = """\
+[pkgmeta]
+default = nothere
+
+[repo]
+"""
+        file = self.write_config(content)
+        with self.assertRaises(PkgMetaConfigFileError) as error:
+            self.make_one(file)
+        self.assertEqual(str(error.exception),
+                         "Invalid default repository")
+
+    def test_correct_init_values(self):
+        location = tempfile.mkdtemp()
+        file = self.write_config(TEST_PKGMETA_CFG % dict(location=location))
+        config = self.make_one(file)
+        default_repo = config.get_repository_config()
+        self.assertEqual(default_repo.name, 'repo2')
+        # Check to see if the configuration variables made it through
+        from pkgmeta.storage import FileSystemStorage
+        repo3 = config.get_repository_config('repo3')
+        self.assertTrue(isinstance(repo3.storage, FileSystemStorage))

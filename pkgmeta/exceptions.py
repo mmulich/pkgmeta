@@ -4,6 +4,7 @@ __all__ = (
     'InvalidVersion',
     'RepositoryIsNotMutable', 'RepositoryNotFound',
     'ReleaseNotFound',
+    'PkgMetaConfigFileError',
     )
 
 
@@ -25,3 +26,8 @@ class ReleaseNotFound(KeyError):
 
 class UnknownRepositoryStorageType(Exception):
     """Raised when an unknown storage type is requested."""
+
+
+class PkgMetaConfigFileError(Exception):
+    """Raised when there is an issue with reading/writing a pkgmeta.cfg file.
+    """
