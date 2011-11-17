@@ -38,6 +38,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   example
    config
    tests
 

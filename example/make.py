@@ -10,9 +10,9 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 def main():
     # Must create the repository location before we read in the configuration.
-    repository_location = os.path.expanduser('~/example-main')
+    repository_location = os.path.expanduser('~/example-repo')
     if not os.path.exists(repository_location):
-        print("Creating the main repository directory.")
+        print("Creating the repository directory: %s" % repository_location)
         os.mkdir(repository_location)
 
         print("Populating repository with example data...")
@@ -21,7 +21,7 @@ def main():
     cfg_file = os.path.join(HERE, 'example.cfg')
     print("Using configuration: %s" % cfg_file)
 
-    print("Read configuration...")
+    print("Reading configuration...")
     config = PkgMetaConfig.from_file(cfg_file)
     repo_config = config.get_repository_config()
 
