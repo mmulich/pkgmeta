@@ -73,7 +73,7 @@ class FileSystemStorage(BaseStorage):
 
     def __init__(self, config):
         super(FileSystemStorage, self).__init__(config)
-        self.location = config.location
+        self.location = config.location = os.path.expanduser(config.location)
 
         path = self.location
         # ??? What do we do when the path doesn't exist?
