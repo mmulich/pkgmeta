@@ -136,12 +136,12 @@ def main():
                                                  "Python package repository")
     parser.add_argument('-c', '--configuration', metavar='CONFIG', nargs=1,
                         default=DEFAULT_CONFIG,
-                        help="repository configuration file location "
-                             "(default: \"%s\")." % DEFAULT_CONFIG)
+                        help="repository configuration file location")
     parser.add_argument('-r', '--repository-name', nargs=1,
-                        # Default is handled by the Config.get_repository_config method.
-                        help="a specific non-default repository name, defaults to "
-                             "the default repository")
+                        # Default is handled by the
+                        # Config.get_repository_config method.
+                        help="a specific non-default repository name, "
+                             "defaults to the default repository")
     subparsers = parser.add_subparsers(dest="command",
                                        help="sub-commands, use --help with "
                                             "action for more help")
@@ -152,7 +152,7 @@ def main():
     # Process action
     cmd = commands[args.command]
     # Retrieve the repository configuration
-    config = PkgMetaConfig(args.configuration)
+    config = PkgMetaConfig.from_file(args.configuration)
     repo_config = config.get_repository_config(args.repository_name)
     # Run the command
     return cmd(repo_config, args)
