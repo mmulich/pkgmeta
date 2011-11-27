@@ -6,13 +6,8 @@ Python Package Metadata Library
 
 See also:
 
+- http://readthedocs.org/docs/pkgmeta
+- The ``docs`` directory of this package
 - https://github.com/pumazi/pkgmeta/wiki
-- the docs directory of this package (sphinx-based documentation)
 
-Installation
-------------
-
-This package isn't installable yet. =P
-
-If you really want to see/use it, manually throw it it site-packages. ;)
-
+.. note:: This project is a work in progress...

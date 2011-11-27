@@ -1,7 +1,8 @@
 Package Metadata (pkgmeta)
 ==========================
 
-A Python package used to create, read and update a Python metadata
+This project contains a Python package
+used to create, read and update a Python metadata
 repository. A metadata repository is a collection of Python
 package (or distribution)
 releases containing information about the package (metadata)
@@ -22,16 +23,11 @@ distutils and setuptools based code
 to work happily with the repository scenario.
 
 The repository holds information in Metadata 1.2 (:pep:`345`) format.
-This package also provides a means
-to convert lesser Metadata formats
-to Metadata 1.2.
-We are using Metadata 1.2,
+The `index2repo <https://github.com/pumazi/index2repo>`_ package
+provides a means to convert lesser Metadata formats
+to version 1.2.
+pkgmeta uses the Metadata 1.2,
 because it is the standard that Python >= 3.3 will use.
-
-The documentation has two major sections::
-
-#. End-user usage and information
-#. Administrative and developer usage
 
 Contents:
 
@@ -39,8 +35,8 @@ Contents:
    :maxdepth: 2
 
    example
-   config
    tests
+   changes
 
 Indices and tables
 ==================

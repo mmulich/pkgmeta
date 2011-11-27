@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """\
-A package used to give direction for backwards and forwards compatiblity.
+A module used to give direction for backwards and forwards compatiblity.
 """
 import sys
 try:
