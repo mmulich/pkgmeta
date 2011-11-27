@@ -37,7 +37,7 @@ Now that we've created an example repository, we can probe it for information.
 A brief example might be to search for distributions containing the term
 ``cal``::
 
-    $ python3.2 pkgmeta/cli.py -c ~/example.cfg search cal
+    $ pkgmeta -c ~/example.cfg search cal
     p   solarcal          - Calendar based on solar dates.                          
     p   webcal            - Web calendaring application
 
@@ -46,7 +46,7 @@ Notice that we passed in the example configuration with the ``-c`` option.
 Now that we've found some distributions, let's try showing the distributions
 metadata::
 
-    $ python3.2 pkgmeta/cli.py -c ~/example.cfg show webcal
+    $ pkgmeta -c ~/example.cfg show webcal
     Metadata-Version: 1.2
     Name: webcal
     Version: 3.0
