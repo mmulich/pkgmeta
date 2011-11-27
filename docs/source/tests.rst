@@ -4,23 +4,31 @@ Testing
 Running the tests
 -----------------
 
-To test the package, use unittest test discovery::
+To test the package, use unittest test discovery, by running the following
+within the pkgmeta's package root::
 
     $ python -m unittest discover
 
-Or for those of you using Python <= 2.6, you'll need to install unittest2
-first. Then run the ``unit2`` script::
+.. Or for those of you using Python <= 2.6, you'll need to install unittest2
+   first. Then run the ``unit2`` script::
 
-    $ pip install unittest2
-    $ unit2 discover
+       $ pip install unittest2
+       $ unit2 discover
 
 Coverage reports
 ----------------
 
-Calling python within coverage's run command doesn't work because of the ``-m`` option flag given to python. So you'll need to
-create a script similar to unittest2's ``unit2``.
+Calling python within coverage's run command doesn't work
+because of the ``-m`` option flag given to python
+conflicts with the coverage command options.
+So you'll need to create a script similar to unittest2's ``unit2``.
 
-I created a script called ``testrunner.py`` and placed it outside the package, because you'll receive import errors if you put it along side the package you are trying to discover. The scripts contents are::
+To solve the fore mentioned issue, I created a script called ``testrunner.py``
+and placed it in my home directory.
+You can place the script anywhere outside the package root.
+If you put the script within the package, you will receive import errors
+when trying to do test discovery.
+The scripts contents are::
 
     # -*- coding: utf-8 -*-
     """Unittest test runner script"""

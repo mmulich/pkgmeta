@@ -34,8 +34,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   installation
+   install
    example
+   config
    tests
    changes
 
