@@ -25,7 +25,7 @@ long_description = '\n\n'.join([
 
 entry_points = """\
 [console_scripts]
-redpill = pkgmeta.cli:main
+pkgmeta = pkgmeta.cli:main
 """
 
 DEV_STATES = [
