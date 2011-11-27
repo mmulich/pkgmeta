@@ -152,7 +152,10 @@ def main():
     # Process action
     cmd = commands[args.command]
     # Retrieve the repository configuration
-    config = PkgMetaConfig.from_file(args.configuration)
+    config_file = args.configuration[0]
+    if config_file is not None:
+        config_file = os.path.expanduser(config_file)
+    config = PkgMetaConfig.from_file(config_file)
     repo_config = config.get_repository_config(args.repository_name)
     # Run the command
     return cmd(repo_config, args)

@@ -3,4 +3,4 @@ default = main
 
 [main]
 type = filesystem
-location = ~/example-repo
+location = %s
