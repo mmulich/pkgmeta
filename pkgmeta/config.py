@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from collections import Mapping
 from configparser import ConfigParser
 from pkgmeta.exceptions import PkgMetaConfigFileError
 from pkgmeta.storage import lookup_storage_by_type
@@ -23,7 +24,7 @@ class RepositoryConfig:
         self.storage = storage_factory(self)
 
 
-class PkgMetaConfig(object):
+class PkgMetaConfig(Mapping):
     """Main pkgmeta configuration object"""
 
     def __init__(self, repositories, default=None):
@@ -66,9 +67,6 @@ class PkgMetaConfig(object):
         setattr(inst, '_file', file)
         return inst
 
-    def __iter__(self):
-        return iter(self.repositories)
-
     def get_repository_config(self, name=None):
         """Get a RepositoryConfig by name. If name is not given,
         the default repository will be returned."""
@@ -79,3 +77,16 @@ class PkgMetaConfig(object):
         except IndexError:
             raise LookupError("Could not find '%s'" % name)
         return repo_config
+
+    # ############################### #
+    #   Abstract method definitions   #
+    # ############################### #
+
+    def __len__(self):
+        return len(self.repositories)
+
+    def __iter__(self):
+        return iter(self.repositories)
+
+    def __getitem__(self, key):
+        return self.get_repository_config(key)

@@ -77,7 +77,8 @@ class PkgMetaConfigTestCase(unittest.TestCase):
 
         # Test with a specific repository name
         repo_name = repo_names[-1]
-        repo_config = config.get_repository_config(repo_name)
+        # __getitem__ uses get_repository_config
+        repo_config = config[repo_name]
         self.assertEqual(repo_config.name, repo_name)
 
 
