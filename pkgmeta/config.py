@@ -23,6 +23,21 @@ class RepositoryConfig(Mapping):
         storage_factory = lookup_storage_by_type(self.type)
         self.storage = storage_factory(self)
 
+    # ############################### #
+    #   Abstract method definitions   #
+    # ############################### #
+
+    def __len__(self):
+        return len(self.storage)
+
+    def __iter__(self):
+        for proj in self.storage:
+            yield proj.name
+        raise StopIteration
+
+    def __getitem__(self, key):
+        return self.storage[key]
+
 
 class PkgMetaConfig(Mapping):
     """Main pkgmeta configuration object"""
