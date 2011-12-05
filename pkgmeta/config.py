@@ -8,7 +8,7 @@ __all__ = ('PkgMetaConfig',
            )
 
 
-class RepositoryConfig:
+class RepositoryConfig(Mapping):
     """A repository configuration"""
 
     def __init__(self, name, type=None, sources=None,
@@ -86,7 +86,9 @@ class PkgMetaConfig(Mapping):
         return len(self.repositories)
 
     def __iter__(self):
-        return iter(self.repositories)
+        for r in self.repositories:
+            yield r.name
+        raise StopIteration
 
     def __getitem__(self, key):
         return self.get_repository_config(key)
