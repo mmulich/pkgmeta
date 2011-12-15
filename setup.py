@@ -7,7 +7,7 @@ def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 name = 'pkgmeta'
-version = '0.1'
+version = '1.0a1'
 
 install_requires = [
     'setuptools',
