@@ -112,7 +112,5 @@ class RepositoryMutationTestCase(unittest.TestCase):
         #: Make sure the repo is empty to start
         self.assertEqual(len(repo), 0)
         #: Set a releaseset
-        release = self.make_releaseset(*SOLARCAL)
-        repo[release.name] = release
-        self.assertEqual(len(repo), 1)
-        self.assertIn(SOLARCAL[0]['name'], repo)
+        with self.assertRaises(TypeError):
+            repo['error'] = object()
