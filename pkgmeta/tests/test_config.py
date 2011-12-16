@@ -100,6 +100,12 @@ class TestRepositoryConfig(unittest.TestCase):
         self.assertEqual(config.foo, 'foo')
         self.assertEqual(config.bar, 'foobar')
 
+    def test_len(self):
+        config = self.make_one('repo')
+        config.storage['dist1'] = object()
+        config.storage['dist2'] = object()
+        self.assertEqual(len(config), 2)
+
 
 class ConfigurationFromAFileTest(unittest.TestCase):
     """Read in the configuration from a pkgmeta.cfg file."""
