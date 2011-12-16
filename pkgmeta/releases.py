@@ -13,11 +13,7 @@ class ReleaseSet(Mapping):
     """
 
     def __init__(self, releases):
-        for release in releases:
-            if not isinstance(release, Metadata):
-                raise TypeError("Release values must be "
-                                "pkgmeta.metadata.Metadata objects.")
-        self.releases = list(releases)
+        self.releases = releases
         self._reorder()
         # FIXME: Find a better way to determine the stable release.
         self._stable_release = len(self) - 1

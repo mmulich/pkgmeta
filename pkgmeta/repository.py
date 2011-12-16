@@ -15,9 +15,6 @@ class Repository(MutableMapping):
     organized by package name then by release (version)."""
 
     def __init__(self, config):
-        if not isinstance(config, RepositoryConfig):
-            raise TypeError("Expected a "
-                            ", pkgmeta.config.RepositoryConfig object.")
         self.config = config
         self.storage = self.config.storage  # For convenience
 

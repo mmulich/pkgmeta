@@ -24,14 +24,6 @@ class TestReleaseSet(BaseTestCase):
         release_path = os.path.join(self.repo_directory, dist_name)
         return _releaseset_from_fs(release_path)
 
-    def test_init_with_noniterable_single_release(self):
-        from pkgmeta.metadata import Metadata
-        v_one = Metadata(mapping={'name': 'foo',
-                                  'version': '1.0'})
-        from pkgmeta.releases import ReleaseSet
-        with self.assertRaises(TypeError):
-            release_set = ReleaseSet(v_one)
-
     def test_release_without_name(self):
         from pkgmeta.metadata import Metadata
         v_one = Metadata(mapping={'version': '1.0'})

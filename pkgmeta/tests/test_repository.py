@@ -35,10 +35,6 @@ class RepositoryTestCase(BaseTestCase):
                                   location=location)
         return self.target_cls(config)
 
-    def test_init_without_config(self):
-        with self.assertRaises(TypeError):
-            self.target_cls(None)
-
     def test_init(self):
         # Create the repository from a repository config
         repo = self.target_cls(self.config)

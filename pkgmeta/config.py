@@ -43,12 +43,7 @@ class PkgMetaConfig(Mapping):
     """Main pkgmeta configuration object"""
 
     def __init__(self, repositories, default=None):
-        if not hasattr(repositories, '__iter__'):
-            repositories = [repositories]
         self.repositories = repositories
-        for repo in self.repositories:
-            if not isinstance(repo, RepositoryConfig):
-                raise TypeError("%s is not a RepsitoryConfig" % repr(repo))
         self.default = default
         if self.default is None:
             self.default = repositories[0].name
