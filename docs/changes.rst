@@ -8,7 +8,7 @@ Changelog
 
    - change message [author]
 
-1.0a1 (unreleased)
+1.0a1 (15-12-2011)
 ------------------
 
 - Initial release. [pumazi]
