@@ -4,10 +4,12 @@ Testing
 Running the tests
 -----------------
 
-To test the package, use unittest test discovery, by running the following
-within the pkgmeta's package root::
+To test the package, use unittest's test discovery by running the following
+within pkgmeta's project root::
 
     $ python -m unittest discover
+
+.. The following is for when Python < 3.2 is supported.
 
 .. Or for those of you using Python <= 2.6, you'll need to install unittest2
    first. Then run the ``unit2`` script::
@@ -18,16 +20,18 @@ within the pkgmeta's package root::
 Coverage reports
 ----------------
 
-Calling python within coverage's run command doesn't work
-because of the ``-m`` option flag given to python
-conflicts with the coverage command options.
-So you'll need to create a script similar to unittest2's ``unit2``.
+Calling Python within coverage's run command doesn't work
+because of the ``-m`` option flag conflicts with the coverage command options.
+In order to resolve the issue, a script similar to unittest2's ``unit2``
+will need to be used.
 
-To solve the fore mentioned issue, I created a script called ``testrunner.py``
-and placed it in my home directory.
-You can place the script anywhere outside the package root.
-If you put the script within the package, you will receive import errors
-when trying to do test discovery.
+Create a script called ``testrunner.py``
+and placed it in your home directory.
+
+.. note:: You can place the script anywhere outside the package root.
+   If you put the script within the package, you will receive import errors
+   when trying to do test discovery.
+
 The scripts contents are::
 
     # -*- coding: utf-8 -*-
@@ -42,6 +46,6 @@ The scripts contents are::
 
 .. seealso:: `Integrating Coverage with Unittest Discovery <http://blog.wearpants.org/integrating-coverage-and-unittest-discovery/>`_
 
-Now you can call coverage like so::
+Now call coverage like so::
 
     $ coverage run --omit=~/testrunner.py ~/testrunner.py

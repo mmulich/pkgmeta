@@ -11,6 +11,10 @@ This information can then be used to find distributions
 and their dependencies without actually acquiring (downloading) the
 distribution itself.
 
+Repositories can derive from one another to further customize the environment.
+This can come in handy when an application depends on a specific set of
+packages that may be older or newer than the latest stable release.
+
 The repository does not actually hold any distribution data. That type of
 information can be found via more established means, such as
 `PyPI <http://pypi.pythong.org/pypi/>`_. Furthermore, the repository can

@@ -12,7 +12,8 @@ Any other sections in the file are repository definitions.
 Example configuration
 ---------------------
 
-The following configuration selects the ``myrepo`` as the default repository.
+The following configuration sets up a repository, named ``myrepo``,
+and selects it as the default repository.
 The ``myrepo`` repository is using the filesystem storage type
 and sources from ``pkgmeta.org``.
 ::

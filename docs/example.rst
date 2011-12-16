@@ -4,11 +4,15 @@ Example
 Initializing the example
 ------------------------
 
-Along side the ``pkgmeta`` package is an example directory which contains
-an example configuration and a small script to populate the repository with
-faux distributions.
+.. note:: In order to work on this example you will need to either check out
+   a copy of the source or download it from PyPI.
 
-To initialize the example, change directories to the project root::
+Along side the ``pkgmeta`` source package is an example directory
+which contains an example configuration
+and a small script to populate the repository with
+fake distributions.
+
+To initialize the example, change directories to the pkgmeta project root::
 
     $ cd [where ever pkgmeta is located]
     $ ls
@@ -32,16 +36,19 @@ Run the ``make.py`` script::
 Walk through
 ------------
 
-Now that we've created an example repository, we can probe it for information.
+Now that we've created an example repository,
+we can probe it for information.
 
-A brief example might be to search for distributions containing the term
-``cal``::
+A brief example might be
+to search for distributions containing the term ``cal``::
 
     $ pkgmeta -c ~/example.cfg search cal
     p   solarcal          - Calendar based on solar dates.                          
     p   webcal            - Web calendaring application
 
-Notice that we passed in the example configuration with the ``-c`` option.
+.. note:: We passed in the example configuration with the ``-c`` option.
+   This is necessary, because without it the pkgmeta script will try
+   (and most likely fail) to find the main configuration file.
 
 Now that we've found some distributions, let's try showing the distributions
 metadata::
