@@ -20,7 +20,7 @@ extras_require = {'test': test_requires}
 
 long_description = '\n\n'.join([
         read('README.rst'),
-        read('docs', 'source', 'changes.rst'),
+        read('docs', 'changes.rst'),
 ])
 
 entry_points = """\
