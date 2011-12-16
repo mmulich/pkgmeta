@@ -31,8 +31,8 @@ class RepositoryConfig(Mapping):
         return len(self.storage)
 
     def __iter__(self):
-        for proj in self.storage:
-            yield proj.name
+        for proj_name in self.storage:
+            yield proj_name
         raise StopIteration
 
     def __getitem__(self, key):
