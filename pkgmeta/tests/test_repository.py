@@ -48,7 +48,7 @@ class RepositoryTestCase(BaseTestCase):
         from pkgmeta.releases import ReleaseSet
         self.assertIsInstance(releases, ReleaseSet)
         self.assertRaises(KeyError, lambda a: repo[a], ('bogus'))
-        
+
     def test_search(self):
         repo = self.make_one()
         self.assertRaises(TypeError, repo.search, ('cal',))
@@ -114,3 +114,13 @@ class RepositoryMutationTestCase(unittest.TestCase):
         #: Set a releaseset
         with self.assertRaises(TypeError):
             repo['error'] = object()
+
+    def test_deletion(self):
+        repo = self.make_one()
+        #: Set a releaseset to later delete
+        release = self.make_releaseset(*SOLARCAL)
+        repo[release.name] = release
+        #: Delete the releaseset
+        del repo[release.name]
+        #: Make sure the repo is empty to start
+        self.assertEqual(len(repo), 0)

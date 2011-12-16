@@ -41,8 +41,7 @@ class Repository(MutableMapping):
         self.storage[key] = value
 
     def __delitem__(self, key):
-        raise Exception("Can't remove items from a read-only repository")
-        
+        del self.storage[key]
 
     # ############## #
     #   Public API   #
